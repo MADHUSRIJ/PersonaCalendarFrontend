@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Auth/GoogleSignIn.dart';
-import 'package:persona_calendar/Services/NavigationState.dart';
+import 'package:persona_calendar/Models/UsersModel.dart';
+import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,22 +27,53 @@ class _RegisterState extends State<Register> {
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController userName = TextEditingController();
   TextEditingController mobile = TextEditingController();
+  TextEditingController hashedPassword = TextEditingController();
+  TextEditingController userIdText = TextEditingController();
 
+  Map<String, dynamic>? userMap;
   bool obscureText = true;
   bool obscureTextConfirm = true;
   bool autoValidate = false;
 
   final _formKey = GlobalKey<FormState>();
 
+  String hashPassword(String password) {
+    var bytes = utf8.encode(password); // Convert the password to a list of bytes
+    var hash = sha256.convert(bytes); // Hash the bytes using SHA-256
+    return hash.toString(); // Convert the hash to a string
+  }
+
   Future<String?> _signup() async {
+    try{
+      print("1");
+
+      http.Response response = await UserApi.postUser(userMap!);
+      print("2");
+      if (response.statusCode == 201) {
+        // Parse the response body
+        Map<String, dynamic> responseBody = json.decode(response.body);
+
+        // Extract the ID from the response body
+        int userId = responseBody['userId'];
+        userIdText.text = userId.toString();
+
+        // Use the ID in your Flutter code
+        print('Created userEvents with ID: $userId');
+      } else {
+        throw Exception('Failed to create userEvents: ${response.statusCode}');
+      }
+    }
+    catch(ex){
+      throw Exception('In post user : ${ex.toString()}');
+    }
     try {
       final User? currentUser =
           (await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text,
-        password: password.text,
+        password: hashedPassword.text,
       ))
               .user;
-      await currentUser!.updateDisplayName(userName.text);
+      await currentUser!.updateDisplayName(userIdText.text);
 
       return null;
     } on FirebaseAuthException catch (e) {
@@ -466,6 +503,13 @@ class _RegisterState extends State<Register> {
                                     setState(() {
                                       autoValidate = false;
                                     });
+                                    Provider.of<UserModel>(context,listen: false).userName = userName.text;
+                                    Provider.of<UserModel>(context,listen: false).mobile = mobile.text;
+                                    Provider.of<UserModel>(context,listen: false).email = email.text;
+                                    hashedPassword.text = hashPassword(password.text);
+                                    Provider.of<UserModel>(context,listen: false).hashedPassword = hashedPassword.text;
+
+                                    userMap = Provider.of<UserModel>(context,listen: false).toMap();
                                     _submitForm();
                                   }
                                 },
@@ -503,8 +547,8 @@ class _RegisterState extends State<Register> {
                                         flex: 2,
                                         child: GestureDetector(
                                           onTap: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  MyApp()));
-                                          },
+                                            Get.toNamed(AppRoutes.SignIn);
+                                            },
                                           child: RichText(
                                             text: const TextSpan(
                                               style: TextStyle(

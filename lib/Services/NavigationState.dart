@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
+enum RouteName { SignIn, Register, Home }
+
 class NavigationState extends ChangeNotifier {
-  String _currentRoute = '/';
+  RouteName _currentRoute = RouteName.SignIn;
 
-  String get currentRoute => _currentRoute;
+  RouteName get currentRoute => _currentRoute;
 
-  void navigateTo(String route) {
-    print("Navigare");
+  void navigateTo(RouteName route) {
     _currentRoute = route;
+    print("Navigate ${route}");
+
     notifyListeners();
   }
 }

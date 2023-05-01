@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Auth/Register.dart';
 import 'package:persona_calendar/Auth/GoogleSignIn.dart';
+import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Services/NavigationState.dart';
+import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/app_routes.dart';
+import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,17 +26,31 @@ class _SignInState extends State<SignIn> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
+  TextEditingController hashedPassword = TextEditingController();
+
   bool obscureText = true;
   bool autoValidate = false;
 
   final _formKey = GlobalKey<FormState>();
 
+  String hashPassword(String password) {
+    var bytes = utf8.encode(password); // Convert the password to a list of bytes
+    var hash = sha256.convert(bytes); // Hash the bytes using SHA-256
+    return hash.toString(); // Convert the hash to a string
+  }
+
+
   Future<String?> _loginAccount() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final User? currentUser = (await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
-        password: password.text,
-      );
+        password: hashedPassword.text,
+      )).user;
+
+      if(currentUser != null) {
+        Map<String,dynamic> map = await UserApi.getUser(int.parse(currentUser.displayName!));
+        UserModel.withMap(map);
+      }
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -78,7 +99,7 @@ class _SignInState extends State<SignIn> {
     if (feedback != null) {
       _alertDialogBox(feedback);
     } else {
-      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
     }
   }
 
@@ -291,6 +312,10 @@ class _SignInState extends State<SignIn> {
                                   setState(() {
                                     autoValidate = false;
                                   });
+                                  Provider.of<UserModel>(context,listen: false).email = email.text;
+                                  hashedPassword.text = hashPassword(password.text);
+                                  Provider.of<UserModel>(context,listen: false).hashedPassword = hashedPassword.text;
+
                                   submitForm();
                                 }
                               },
@@ -328,7 +353,7 @@ class _SignInState extends State<SignIn> {
                                       flex: 2,
                                       child: GestureDetector(
                                         onTap: () {
-                                         Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
+                                          Get.toNamed(AppRoutes.Register);
                                         },
                                         child: RichText(
                                           text: const TextSpan(

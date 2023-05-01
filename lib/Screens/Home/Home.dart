@@ -1,11 +1,17 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persona_calendar/Animation/animation.dart';
+import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Services/SampleEvent.dart';
+import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/sizeConfig.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -110,6 +116,18 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+          GestureDetector(
+            child: const Icon(
+              Icons.person,
+              color: Colors.black,
+            ),
+            onTap: (){
+              FirebaseAuth.instance.signOut();
+              Get.toNamed(AppRoutes.MyApp);
+            },
+          ),
+
+          Text(Provider.of<UserModel>(context,listen: false).userName,style: TextStyle(color: Colors.black),),
         ],
       ),
       body: Row(

@@ -19,7 +19,22 @@ class UserApi{
       throw Exception('Response error: ${ex.toString()}');
     }
   }
-
+  static Future<Map<String, dynamic>> getUser(int id) async {
+    String userApiUrl = "$baseUrl/api/users/$id";
+    try {
+      http.Client client = http.Client();
+      final response = await client.get(Uri.parse(userApiUrl));
+      if(response.statusCode == 200){
+        Map<String, dynamic> responseBody = json.decode(response.body);
+        return responseBody;
+      }
+      else{
+        throw Exception('Response error');
+      }
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+  }
   static Future<Response> postUser(Map<String, dynamic> user) async {
     String userApiUrl = "$baseUrl/api/users";
     try {
@@ -35,6 +50,8 @@ class UserApi{
     } catch (ex) {
       throw Exception('Response error: ${ex.toString()}');
     }
+
+
   }
 }
 

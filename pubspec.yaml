@@ -53,6 +53,8 @@ dependencies:
   google_fonts:
   firebase_core_platform_interface: 4.5.1
   calendar_date_picker2: ^0.5.2
+  crypto:
+  get: ^4.3.8
 
 dev_dependencies:
   flutter_test:
