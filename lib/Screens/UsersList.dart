@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
-import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/Apis/UserApi.dart';
 
 class UserDetails extends StatefulWidget {
   const UserDetails({Key? key}) : super(key: key);

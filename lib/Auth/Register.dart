@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Auth/GoogleSignIn.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
-import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';

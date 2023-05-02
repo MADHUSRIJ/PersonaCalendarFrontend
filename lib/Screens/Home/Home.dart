@@ -18,7 +18,8 @@ import 'package:persona_calendar/sizeConfig.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String userId;
+  const HomePage({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -78,8 +79,6 @@ class _HomePageState extends State<HomePage> {
       return valueText;
     }
 
-
-
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -120,21 +119,29 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Container(
-            alignment: Alignment.center,
-            child: Text(Provider.of<UserModel>(context,listen: false).userName,style: TextStyle(color: Colors.black),),
-          ),),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 16),child:  GestureDetector(
-            child: const Icon(
-              Icons.person,
-              color: Colors.black,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                Provider.of<UserModel>(context, listen: false).userName,
+                style: TextStyle(color: Colors.black),
+              ),
             ),
-            onTap: (){
-              FirebaseAuth.instance.signOut();
-              Get.toNamed(AppRoutes.MyApp);
-            },
-          ),)
-
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+              child: const Icon(
+                Icons.person,
+                color: Colors.black,
+              ),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Get.toNamed(AppRoutes.MyApp);
+              },
+            ),
+          )
         ],
       ),
       body: Row(
@@ -192,7 +199,15 @@ class _HomePageState extends State<HomePage> {
                 cellCalendarPageController: cellCalendarPageController,
                 events: events,
                 daysOfTheWeekBuilder: (dayIndex) {
-                  final labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                  final labels = [
+                    "Sun",
+                    "Mon",
+                    "Tue",
+                    "Wed",
+                    "Thu",
+                    "Fri",
+                    "Sat"
+                  ];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 4.0, top: 8),
                     child: Text(
@@ -208,8 +223,8 @@ class _HomePageState extends State<HomePage> {
                   final year = datetime!.year.toString();
                   final month = datetime.month.monthName;
                   return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
                     child: Row(
                       children: [
                         const SizedBox(width: 16),
@@ -236,12 +251,16 @@ class _HomePageState extends State<HomePage> {
                               alignment: Alignment.center,
                               height: SizeConfig.height! * 6,
                               padding: EdgeInsets.symmetric(horizontal: 16),
-
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Color(0xff00ADB5),
                               ),
-                              child: Text("Today",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
+                              child: Text(
+                                "Today",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         )
@@ -295,8 +314,12 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: () async{
-                          await EventForm.createEvent(context);
+                        onTap: () async {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Events(userId: int.parse(widget.userId));
+                              });
                         },
                         child: Stack(
                           children: [
@@ -343,8 +366,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: InkWell(
-                        onTap: (){
-                          TaskForm.createTask(context);
+                        onTap: () {
+                          showDialog(context: context, builder: (context){
+                            return TasksForm(userId: int.parse(widget.userId));
+                          });
                         },
                         child: Stack(
                           children: [
@@ -390,8 +415,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: InkWell(
-                        onTap: (){
-                          NotesForm.createNote(context);
+                        onTap: () {
+                          showDialog(context: context, builder: (context){
+                            return NotesForm(userId: int.parse(widget.userId));
+                          });
                         },
                         child: Stack(
                           children: [
@@ -437,8 +464,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: InkWell(
-                        onTap: (){
-                         ReminderForm.createReminder(context);
+                        onTap: () {
+                          showDialog(context: context, builder: (context){
+                            return ReminderForm(userId: int.parse(widget.userId));
+                          });
                         },
                         child: Stack(
                           children: [
@@ -490,13 +519,4 @@ class _HomePageState extends State<HomePage> {
       ),
     ));
   }
-
-
-
-
-
-
-
-
-
 }

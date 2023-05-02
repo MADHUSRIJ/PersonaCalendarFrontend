@@ -8,7 +8,7 @@ import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Screens/Home/Home.dart';
 import 'package:persona_calendar/Screens/UsersList.dart';
 import 'package:persona_calendar/Services/NavigationState.dart';
-import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +24,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Routing(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserModel>.value(value: (UserModel())),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Routing(),
+      ),
     );
   }
 }
@@ -174,7 +179,7 @@ class _UserModelRoutingState extends State<UserModelRouting> {
   @override
   Widget build(BuildContext context) {
     return initialized
-        ? HomePage()
+        ? HomePage(userId: widget.userId,)
         : Center(
             child: Container(
                 height: 48,

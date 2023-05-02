@@ -6,7 +6,7 @@ import 'package:persona_calendar/Models/EventsModel.dart';
 import 'package:persona_calendar/Models/NotesModel.dart';
 import 'package:persona_calendar/Models/ReminderModel.dart';
 import 'package:persona_calendar/Models/TasksModel.dart';
-import 'package:persona_calendar/Services/UserApi.dart';
+import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:http/http.dart' as http;
 
 class UserModel with ChangeNotifier{
