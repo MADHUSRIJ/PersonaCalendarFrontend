@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Services/Apis/NotesApi.dart';
+import 'package:persona_calendar/Services/app_routes.dart';
+import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -199,8 +202,10 @@ class _NotesFormState extends State<NotesForm> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                       child: GestureDetector(
-                        onTap: () async {
-                          int eventId = await submitForm();
+                        onTap: () {
+                          if(submitForm() != ""){
+                            Navigator.pop(context);
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,

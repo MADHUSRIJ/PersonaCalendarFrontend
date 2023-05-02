@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Services/Apis/EventsApi.dart';
+import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 
 
@@ -39,7 +42,7 @@ class _EventsState extends State<Events> {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      final formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
       print(formattedDate);
       return formattedDate;
     }
@@ -486,7 +489,9 @@ class _EventsState extends State<Events> {
                       padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                       child: GestureDetector(
                         onTap: () {
-                          submitForm();
+                          if(submitForm() != ""){
+                            Navigator.pop(context);
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,

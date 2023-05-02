@@ -80,7 +80,6 @@ class MyApp extends StatelessWidget {
           appId: "1:983009985771:web:230b9a9037688f59bf2aae",
           measurementId: "G-KQ4YV3904W"));
 
-
   Future<Widget> _authorize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? displayName = prefs.getString('displayName');
@@ -90,7 +89,9 @@ class MyApp extends StatelessWidget {
       if (displayName == null) {
         await prefs.setString('displayName', user.displayName!);
       }
-      return UserModelRouting(userId: user.displayName!); // Or the unique identifier you want to use for this user.
+      return UserModelRouting(
+          userId: user
+              .displayName!); // Or the unique identifier you want to use for this user.
     } else {
       return const SignIn();
     }
@@ -156,14 +157,20 @@ class UserModelRouting extends StatefulWidget {
 
 class _UserModelRoutingState extends State<UserModelRouting> {
   bool initialized = false;
+  UserModel? userModel;
   void initializeData() async {
     Map<String, dynamic> map = await UserApi.getUser(int.parse(widget.userId));
-    UserModel userModel = Provider.of<UserModel>(context, listen: false);
-    userModel.userName = map["userName"];
-    userModel.mobile = map["mobile"];
-    userModel.email = map["email"];
-    userModel.userId = map["userId"];
-    print("UserModel ${userModel.userName}");
+    userModel = Provider.of<UserModel>(context, listen: false);
+    userModel!.userName = map["userName"];
+    userModel!.mobile = map["mobile"];
+    userModel!.email = map["email"];
+    userModel!.userId = map["userId"];
+    userModel!.userEvents = map["Events"];
+    userModel!.userTasks = map["Tasks"];
+    userModel!.userReminder = map["Reminder"];
+    userModel!.userNotes = map["Notes"];
+
+    print("UserModel ${userModel!.userName}");
     setState(() {
       initialized = true;
     });
@@ -179,7 +186,13 @@ class _UserModelRoutingState extends State<UserModelRouting> {
   @override
   Widget build(BuildContext context) {
     return initialized
-        ? HomePage(userId: widget.userId,)
+        ? HomePage(
+            userId: widget.userId,
+            events: userModel!.userEvents,
+            tasks: userModel!.userTasks,
+            reminder: userModel!.userReminder,
+            notes: userModel!.userNotes,
+          )
         : Center(
             child: Container(
                 height: 48,

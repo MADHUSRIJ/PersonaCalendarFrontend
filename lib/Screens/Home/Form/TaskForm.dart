@@ -36,7 +36,7 @@ class _TasksFormState extends State<TasksForm> {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      final formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
       print(formattedDate);
       return formattedDate;
     }
@@ -341,7 +341,9 @@ class _TasksFormState extends State<TasksForm> {
                       padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                       child: GestureDetector(
                         onTap: () {
-                          submitForm();
+                          if(submitForm() != ""){
+                            Navigator.pop(context);
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,
