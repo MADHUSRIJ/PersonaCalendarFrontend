@@ -12,12 +12,11 @@ import 'package:persona_calendar/Services/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    App()
-  );
+  runApp(App());
 }
 
 class App extends StatelessWidget {
@@ -25,14 +24,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Routing(),
     );
   }
 }
-
 
 class Routing extends StatefulWidget {
   const Routing({Key? key}) : super(key: key);
@@ -50,8 +47,12 @@ class _RoutingState extends State<Routing> {
       child: GetMaterialApp(
         title: 'MyApp',
         initialRoute: AppRoutes.MyApp,
+        debugShowCheckedModeBanner: false,
         getPages: [
-          GetPage(name: AppRoutes.HomePage, page: () => UserModelRouting(userId: FirebaseAuth.instance.currentUser!.displayName!)),
+          GetPage(
+              name: AppRoutes.HomePage,
+              page: () => UserModelRouting(
+                  userId: FirebaseAuth.instance.currentUser!.displayName!)),
           GetPage(name: AppRoutes.MyApp, page: () => MyApp()),
           GetPage(name: AppRoutes.SignIn, page: () => SignIn()),
           GetPage(name: AppRoutes.Register, page: () => Register()),
@@ -64,7 +65,6 @@ class _RoutingState extends State<Routing> {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-
   final Future<FirebaseApp> _initialization = Firebase.initializeApp(
       options: const FirebaseOptions(
           apiKey: "AIzaSyD11yXVlTI31yQEV7JvFVwDxJcqs6ZWEZk",
@@ -75,7 +75,22 @@ class MyApp extends StatelessWidget {
           appId: "1:983009985771:web:230b9a9037688f59bf2aae",
           measurementId: "G-KQ4YV3904W"));
 
-  // This widget is the root of your application.
+
+  Future<Widget> _authorize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? displayName = prefs.getString('displayName');
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      if (displayName == null) {
+        await prefs.setString('displayName', user.displayName!);
+      }
+      return UserModelRouting(userId: user.displayName!); // Or the unique identifier you want to use for this user.
+    } else {
+      return const SignIn();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -96,15 +111,24 @@ class MyApp extends StatelessWidget {
 
             if (snapshot.connectionState == ConnectionState.done) {
               SizeConfig.init(context);
-              User? user = FirebaseAuth.instance.currentUser;
-              print(user);
-              print("User");
-              if (user == null) {
-                return const SignIn();
-              } else {
-                return UserModelRouting(userId: user.displayName!);
-              }
+              return StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    return FutureBuilder(
+                      future: _authorize(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return snapshot.data!;
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    );
+                  });
             }
+
             return Center(
                 child: Container(
                     height: 48,
@@ -117,7 +141,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class UserModelRouting extends StatefulWidget {
   final String userId;
   const UserModelRouting({Key? key, required this.userId}) : super(key: key);
@@ -128,8 +151,8 @@ class UserModelRouting extends StatefulWidget {
 
 class _UserModelRoutingState extends State<UserModelRouting> {
   bool initialized = false;
-  void initializeData() async{
-    Map<String,dynamic> map = await UserApi.getUser(int.parse(widget.userId));
+  void initializeData() async {
+    Map<String, dynamic> map = await UserApi.getUser(int.parse(widget.userId));
     UserModel userModel = Provider.of<UserModel>(context, listen: false);
     userModel.userName = map["userName"];
     userModel.mobile = map["mobile"];
@@ -150,7 +173,12 @@ class _UserModelRoutingState extends State<UserModelRouting> {
 
   @override
   Widget build(BuildContext context) {
-
-    return initialized ? HomePage() : CircularProgressIndicator();
+    return initialized
+        ? HomePage()
+        : Center(
+            child: Container(
+                height: 48,
+                width: 48,
+                child: const CircularProgressIndicator()));
   }
 }

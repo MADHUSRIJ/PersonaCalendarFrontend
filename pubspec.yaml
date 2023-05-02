@@ -46,11 +46,10 @@ dependencies:
   firebase_analytics:
   provider:
   google_sign_in:
-  country_code_picker:
-  pinput: ^1.2.2
   simple_animations: ^1.3.3
   flutter_animated_dialog:
   google_fonts:
+  shared_preferences: ^2.0.8
   firebase_core_platform_interface: 4.5.1
   calendar_date_picker2: ^0.5.2
   crypto:

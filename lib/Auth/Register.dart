@@ -45,10 +45,10 @@ class _RegisterState extends State<Register> {
 
   Future<String?> _signup() async {
     try{
-      print("1");
+  
 
       http.Response response = await UserApi.postUser(userMap!);
-      print("2");
+    
       if (response.statusCode == 201) {
         // Parse the response body
         Map<String, dynamic> responseBody = json.decode(response.body);

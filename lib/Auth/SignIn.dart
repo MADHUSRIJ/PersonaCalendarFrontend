@@ -34,23 +34,21 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
 
   String hashPassword(String password) {
-    var bytes = utf8.encode(password); // Convert the password to a list of bytes
+    var bytes =
+        utf8.encode(password); // Convert the password to a list of bytes
     var hash = sha256.convert(bytes); // Hash the bytes using SHA-256
     return hash.toString(); // Convert the hash to a string
   }
 
-
   Future<String?> _loginAccount() async {
     try {
-      final User? currentUser = (await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final User? currentUser =
+          (await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
         password: hashedPassword.text,
-      )).user;
+      ))
+              .user;
 
-      if(currentUser != null) {
-        Map<String,dynamic> map = await UserApi.getUser(int.parse(currentUser.displayName!));
-        UserModel.withMap(map);
-      }
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -66,12 +64,11 @@ class _SignInState extends State<SignIn> {
           return AlertDialog(
             title: const Text(
               "Field Required",
-              style: TextStyle(fontSize: 16,color: Color(0xff00ADB5)),
+              style: TextStyle(fontSize: 16, color: Color(0xff00ADB5)),
             ),
             content: Text(
               error,
-              style: const TextStyle(
-                  color:  Color(0xff393E46), fontSize: 12),
+              style: const TextStyle(color: Color(0xff393E46), fontSize: 12),
             ),
             actions: [
               GestureDetector(
@@ -83,7 +80,8 @@ class _SignInState extends State<SignIn> {
                       color: const Color(0xff00ADB5),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: const Text(
                       "Close",
                       style: TextStyle(color: Colors.white),
@@ -312,9 +310,12 @@ class _SignInState extends State<SignIn> {
                                   setState(() {
                                     autoValidate = false;
                                   });
-                                  Provider.of<UserModel>(context,listen: false).email = email.text;
-                                  hashedPassword.text = hashPassword(password.text);
-                                  Provider.of<UserModel>(context,listen: false).hashedPassword = hashedPassword.text;
+                                  Provider.of<UserModel>(context, listen: false)
+                                      .email = email.text;
+                                  hashedPassword.text =
+                                      hashPassword(password.text);
+                                  Provider.of<UserModel>(context, listen: false)
+                                      .hashedPassword = hashedPassword.text;
 
                                   submitForm();
                                 }
