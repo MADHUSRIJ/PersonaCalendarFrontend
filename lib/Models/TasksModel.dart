@@ -8,6 +8,7 @@ class TaskModel with ChangeNotifier {
   String? _occurance;
   String? _description;
   bool? _notification;
+  String? _access;
 
   int? get taskId => _taskId;
   String get taskTitle => _taskTitle!;
@@ -16,20 +17,22 @@ class TaskModel with ChangeNotifier {
   String get occurance => _occurance!;
   String get description => _description!;
   bool get notification => _notification!;
+  String get access => _access!;
 
   TaskModel(this._taskTitle, this._taskDate, this._taskTime, this._occurance,
-      this._description, this._notification);
+      this._description, this._notification,this._access);
   TaskModel.withId(this._taskId, this._taskTitle, this._taskDate,
-      this._taskTime, this._occurance, this._description, this._notification);
+      this._taskTime, this._occurance, this._description, this._notification,this._access);
 
   TaskModel.fromObject(dynamic object) {
     _taskId = object["taskId"];
     _taskTitle = object["taskTitle"];
     _taskDate = object["taskDate"];
     _taskTime = object["taskTime"];
-    _occurance = object["occurance"];
-    _description = object["description"];
-    _notification = object["notification"];
+    _occurance = object["taskOccurance"];
+    _description = object["taskDescription"];
+    _notification = object["taskNotification"];
+    _access = object["access"];
   }
 
   Map<String, dynamic> toMap() {
@@ -38,9 +41,10 @@ class TaskModel with ChangeNotifier {
     map["taskTitle"] = _taskTitle;
     map["taskDate"] = _taskDate;
     map["taskTime"] = _taskTime;
-    map["occurance"] = _occurance;
-    map["description"] = _description;
-    map["notification"] = _notification;
+    map["taskOccurance"] = _occurance;
+    map["taskDescription"] = _description;
+    map["taskNotification"] = _notification;
+    map["access"] = _access;
     return map;
   }
 }

@@ -20,8 +20,8 @@ class MyCalendarDataSource extends CalendarDataSource {
   void _addEvents(List<EventsModel> events) {
     for (final event in events) {
       appointments?.add(Appointment(
-        startTime: DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.parse(event.startDate))),
-        endTime: DateTime.parse(event.endDate),
+        startTime: DateTime.parse("${event.startDate} ${event.startTime}"),
+        endTime: DateTime.parse("${event.endDate} ${event.endTime}"),
         subject: event.eventTitle,
         notes: event.description ?? '',
         location: event.location ?? '',
@@ -35,10 +35,10 @@ class MyCalendarDataSource extends CalendarDataSource {
   void _addReminders(List<RemainderModel> reminders) {
     for (final reminder in reminders) {
       final dateString = reminder.remainderDate;
-      print("Remins $dateString");
+      final timeString = reminder.remainderTime;
       if (dateString != null) {
-        final date = DateTime.parse(dateString);
-        print("Remins $date");
+        final date = DateTime.parse("$dateString $timeString");
+
         appointments?.add(Appointment(
           startTime: date,
           endTime: date,
@@ -52,8 +52,8 @@ class MyCalendarDataSource extends CalendarDataSource {
   void _addTasks(List<TaskModel> tasks) {
     for (final task in tasks) {
       appointments?.add(Appointment(
-        startTime: DateTime.parse(task.taskDate),
-        endTime: DateTime.parse(task.taskDate),
+        startTime: DateTime.parse("${task.taskDate} ${task.taskTime}"),
+        endTime: DateTime.parse("${task.taskDate} ${task.taskTime}"),
         subject: task.taskTitle,
         notes: task.description ?? '',
         color: Colors.red,

@@ -10,6 +10,7 @@ class EventsModel with ChangeNotifier {
   String? _occurance;
   String? _location;
   String? _description;
+  String? _access;
   bool? _notification;
 
   int? get eventId => _eventId;
@@ -22,6 +23,7 @@ class EventsModel with ChangeNotifier {
   String get location => _location!;
   String get description => _description!;
   bool get notification => _notification!;
+  String get access => _access!;
 
   EventsModel();
   EventsModel.details(
@@ -33,7 +35,8 @@ class EventsModel with ChangeNotifier {
       this._occurance,
       this._location,
       this._description,
-      this._notification);
+      this._notification,
+      this._access);
   EventsModel.withId(
       this._eventId,
       this._eventTitle,
@@ -44,7 +47,7 @@ class EventsModel with ChangeNotifier {
       this._occurance,
       this._location,
       this._description,
-      this._notification);
+      this._notification,this._access);
 
   EventsModel.fromObject(dynamic object) {
     _eventId = object["eventId"];
@@ -53,10 +56,11 @@ class EventsModel with ChangeNotifier {
     _endDate = object["endDate"];
     _startTime = object["startTime"];
     _endTime = object["endTime"];
-    _occurance = object["occurance"];
+    _occurance = object["eventOccurance"];
     _location = object["location"];
     _description = object["eventDescription"];
-    _notification = object["notification"];
+    _notification = object["eventNotification"];
+    _access = object["access"];
   }
 
   Map<String, dynamic> toMap() {
@@ -67,10 +71,11 @@ class EventsModel with ChangeNotifier {
     map["endDate"] = _endDate;
     map["startTime"] = _startTime;
     map["endTime"] = _endTime;
-    map["occurance"] = _occurance;
+    map["eventOccurance"] = _occurance;
     map["location"] = _location;
     map["eventDescription"] = _description;
-    map["notification"] = _notification;
+    map["eventNotification"] = _notification;
+    map["access"] = _access;
     return map;
   }
 }

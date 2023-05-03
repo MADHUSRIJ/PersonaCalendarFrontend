@@ -73,6 +73,7 @@ class _EventsState extends State<Events> {
         "startTime": startTime.text,
         "endTime": endTime.text,
         "eventOccurance": dropdownValue,
+        "location" : location.text,
         "eventNotification": isChecked,
         "userId" : widget.userId,
         "access": "Owner",

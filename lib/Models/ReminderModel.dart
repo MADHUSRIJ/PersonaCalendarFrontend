@@ -7,12 +7,14 @@ class RemainderModel with ChangeNotifier {
   String? _remainderTime;
   String? _occurance;
   String? _description;
+  String? _access;
 
   int? get remainderId => _remainderId;
   String get remainderDate => _remainderDate!;
   String get remainderTime => _remainderTime!;
   String get occurance => _occurance!;
   String get description => _description!;
+  String get access => _access!;
 
 
   RemainderModel(
@@ -20,29 +22,31 @@ class RemainderModel with ChangeNotifier {
       this._remainderDate,
       this._remainderTime,
       this._occurance,
-      this._description);
+      this._description,this._access);
   RemainderModel.withId(
       this._remainderId,
       this._remainderDate,
       this._remainderTime,
       this._occurance,
-      this._description);
+      this._description,this._access);
 
   RemainderModel.fromObject(dynamic object) {
-    _remainderId = object["remainderId"];
-    _remainderDate = object["remainderDate"];
-    _remainderTime = object["remainderTime"];
-    _occurance = object["occurance"];
+    _remainderId = object["reminderId"];
+    _remainderDate = object["reminderDate"];
+    _remainderTime = object["reminderTime"];
+    _occurance = object["reminderOccurence"];
     _description = object["reminderDescription"];
+    _access = object["access"];
   }
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    map["remainderId"] = _remainderId;
-    map["remainderDate"] = _remainderDate;
-    map["remainderTime"] = _remainderTime;
-    map["occurance"] = _occurance;
+    map["reminderId"] = _remainderId;
+    map["reminderDate"] = _remainderDate;
+    map["reminderTime"] = _remainderTime;
+    map["reminderOccurence"] = _occurance;
     map["reminderDescription"] = _description;
+    map["access"] = _access;
     return map;
   }
 }

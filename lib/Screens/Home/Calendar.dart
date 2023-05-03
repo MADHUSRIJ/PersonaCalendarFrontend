@@ -22,14 +22,18 @@ class _CalendarPageState extends State<CalendarPage> {
 
   late MyCalendarDataSource _dataSource;
 
+
+  List<TaskModel> tasks = [];
   @override
   void initState() {
     super.initState();
-    /*_dataSource = MyCalendarDataSource(
+    print("Calender");
+    print(widget.reminders[0].remainderDate);
+    _dataSource = MyCalendarDataSource(
       events: widget.events,
       reminders: widget.reminders,
       tasks: widget.tasks,
-    );*/
+    );
   }
 
   Map<String, CalendarView> view = {
@@ -98,6 +102,7 @@ class _CalendarPageState extends State<CalendarPage> {
           flex: 7,
             child: SfCalendar(
           controller: calendarController,
+          dataSource: _dataSource,
           view: current,
           headerHeight: 0,
           onViewChanged: (details){
@@ -125,6 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
           },
           monthViewSettings: const MonthViewSettings(
             navigationDirection: MonthNavigationDirection.horizontal,
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
             dayFormat: 'EEE',
           ),
           initialDisplayDate: DateTime.now(),

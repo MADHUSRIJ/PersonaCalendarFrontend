@@ -29,57 +29,65 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _hovering = false;
+
   @override
-  Widget build(BuildContext context) {
-    bool _hovering = false;
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("Hello");
+    print(widget.reminder[0].description);
+  }
 
+  final config = CalendarDatePicker2WithActionButtonsConfig(
+    calendarType: CalendarDatePicker2Type.range,
+    disableModePicker: true,
+  );
 
-    final config = CalendarDatePicker2WithActionButtonsConfig(
-      calendarType: CalendarDatePicker2Type.range,
-      disableModePicker: true,
-    );
+  late DateTime selectedDate;
+  List<DateTime?> rangeDatePickerValueWithDefaultValue = [
+    DateTime(1999, 5, 6),
+    DateTime(1999, 5, 21),
+  ];
 
-    late DateTime selectedDate;
-    List<DateTime?> rangeDatePickerValueWithDefaultValue = [
-      DateTime(1999, 5, 6),
-      DateTime(1999, 5, 21),
-    ];
+  List<DateTime?> rangeDatePickerWithActionButtonsWithValue = [
+    DateTime.now(),
+    DateTime.now(),
+  ];
 
-    List<DateTime?> rangeDatePickerWithActionButtonsWithValue = [
-      DateTime.now(),
-      DateTime.now(),
-    ];
-
-    String getValueText(
+  String getValueText(
       CalendarDatePicker2Type datePickerType,
       List<DateTime?> values,
-    ) {
-      values =
-          values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
-      var valueText = (values.isNotEmpty ? values[0] : null)
-          .toString()
-          .replaceAll('00:00:00.000', '');
+      ) {
+    values =
+        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+    var valueText = (values.isNotEmpty ? values[0] : null)
+        .toString()
+        .replaceAll('00:00:00.000', '');
 
-      if (datePickerType == CalendarDatePicker2Type.multi) {
-        valueText = values.isNotEmpty
-            ? values
-                .map((v) => v.toString().replaceAll('00:00:00.000', ''))
-                .join(', ')
+    if (datePickerType == CalendarDatePicker2Type.multi) {
+      valueText = values.isNotEmpty
+          ? values
+          .map((v) => v.toString().replaceAll('00:00:00.000', ''))
+          .join(', ')
+          : 'null';
+    } else if (datePickerType == CalendarDatePicker2Type.range) {
+      if (values.isNotEmpty) {
+        final startDate = values[0].toString().replaceAll('00:00:00.000', '');
+        final endDate = values.length > 1
+            ? values[1].toString().replaceAll('00:00:00.000', '')
             : 'null';
-      } else if (datePickerType == CalendarDatePicker2Type.range) {
-        if (values.isNotEmpty) {
-          final startDate = values[0].toString().replaceAll('00:00:00.000', '');
-          final endDate = values.length > 1
-              ? values[1].toString().replaceAll('00:00:00.000', '')
-              : 'null';
-          valueText = '$startDate to $endDate';
-        } else {
-          return 'null';
-        }
+        valueText = '$startDate to $endDate';
+      } else {
+        return 'null';
       }
-
-      return valueText;
     }
+
+    return valueText;
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
 
 
