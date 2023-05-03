@@ -307,6 +307,9 @@ class _ReminderFormState extends State<ReminderForm> {
                         onTap: () {
                           if(submitForm() != ""){
                             Navigator.pop(context);
+                            setState(() {
+
+                            });
                           }
                         },
                         child: Container(

@@ -187,11 +187,7 @@ class _UserModelRoutingState extends State<UserModelRouting> {
   Widget build(BuildContext context) {
     return initialized
         ? HomePage(
-            userId: widget.userId,
-            events: userModel!.userEvents,
-            tasks: userModel!.userTasks,
-            reminder: userModel!.userReminder,
-            notes: userModel!.userNotes,
+      userModel: userModel!,
           )
         : Center(
             child: Container(

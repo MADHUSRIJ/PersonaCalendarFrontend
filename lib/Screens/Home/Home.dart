@@ -2,10 +2,6 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:persona_calendar/Models/EventsModel.dart';
-import 'package:persona_calendar/Models/NotesModel.dart';
-import 'package:persona_calendar/Models/ReminderModel.dart';
-import 'package:persona_calendar/Models/TasksModel.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Screens/Home/Calendar.dart';
 import 'package:persona_calendar/Screens/Home/Form/EventForm.dart';
@@ -16,28 +12,19 @@ import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  final String userId;
-  final List<EventsModel> events;
-  final List<TaskModel> tasks;
-  final List<RemainderModel> reminder;
-  final List<NotesModel> notes;
 
-  const HomePage({Key? key, required this.userId, required this.events, required this.tasks, required this.reminder, required this.notes}) : super(key: key);
+  final UserModel userModel;
+  const HomePage({Key? key,required this.userModel}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _hovering = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("Hello");
-    print(widget.reminder[0].description);
-  }
+  bool _eventHovering = false;
+  bool _taskHovering = false;
+  bool _reminderHovering = false;
+  bool _notesHovering = false;
 
   final config = CalendarDatePicker2WithActionButtonsConfig(
     calendarType: CalendarDatePicker2Type.range,
@@ -142,16 +129,16 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
-                      const UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(color: Color(0xff00ADB5)),
+                       UserAccountsDrawerHeader(
+                        decoration: const BoxDecoration(color: Color(0xff00ADB5)),
                         accountName: Text(
-                          'John Doe',
-                          style: TextStyle(
+                          widget.userModel.userName,
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 20),
                         ),
-                        accountEmail: Text('john.doe@example.com',
-                            style: TextStyle(fontWeight: FontWeight.w300)),
-                        currentAccountPicture: CircleAvatar(
+                        accountEmail: Text(widget.userModel.email,
+                            style: const TextStyle(fontWeight: FontWeight.w300)),
+                        currentAccountPicture: const CircleAvatar(
                           radius: 4,
                           backgroundColor: Colors.white,
                           child: Icon(
@@ -160,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                             color: Color(0xff393E46),
                           ),
                         ),
-                        currentAccountPictureSize: Size(50, 50),
+                        currentAccountPictureSize: const Size(50, 50),
                       ),
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -183,7 +170,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 15,
             child: Center(
-              child: CalendarPage(events: widget.events,reminders: widget.reminder,tasks: widget.tasks),
+              child: CalendarPage(events: widget.userModel.userEvents,reminders: widget.userModel.userReminder,tasks: widget.userModel.userTasks),
             ),
           ),
           Expanded(
@@ -199,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                           showDialog(
                               context: context,
                               builder: (context) {
-                                return Events(userId: int.parse(widget.userId));
+                                return Events(userId: widget.userModel.userId);
                               });
                         },
                         child: Stack(
@@ -216,21 +203,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Positioned(
-                              top: -20,
+                              bottom: 24,
                               child: AnimatedOpacity(
-                                opacity: 0.0,
+                                opacity: _eventHovering ? 1.0 : 0.0,
                                 duration: const Duration(milliseconds: 100),
                                 child: Container(
-                                  padding: const EdgeInsets.all(5.0),
+                                  width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   child: const Text(
-                                    'Click to add event',
+                                    'Event',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
+                                      color: Color(0xff00ADB5),
+                                      fontSize: 10.0,
                                     ),
                                   ),
                                 ),
@@ -240,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onHover: (val) {
                           setState(() {
-                            _hovering = val;
+                            _eventHovering = val;
                           });
                         },
                       ),
@@ -249,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         onTap: () {
                           showDialog(context: context, builder: (context){
-                            return TasksForm(userId: int.parse(widget.userId));
+                            return TasksForm(userId: widget.userModel.userId);
                           });
                         },
                         child: Stack(
@@ -265,21 +252,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Positioned(
-                              top: -20,
+                              bottom: 24,
                               child: AnimatedOpacity(
-                                opacity: _hovering ? 1.0 : 0.0,
+                                opacity: _taskHovering ? 1.0 : 0.0,
                                 duration: const Duration(milliseconds: 100),
                                 child: Container(
-                                  padding: const EdgeInsets.all(5.0),
+                                  width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   child: const Text(
-                                    'Click to add tasks',
+                                    'Task',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
+                                      color: Color(0xff00ADB5),
+                                      fontSize: 10.0,
                                     ),
                                   ),
                                 ),
@@ -289,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onHover: (val) {
                           setState(() {
-                            _hovering = val;
+                            _taskHovering = val;
                           });
                         },
                       ),
@@ -298,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         onTap: () {
                           showDialog(context: context, builder: (context){
-                            return NotesForm(userId: int.parse(widget.userId));
+                            return NotesForm(userId: widget.userModel.userId);
                           });
                         },
                         child: Stack(
@@ -314,21 +301,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Positioned(
-                              top: -20,
+                              bottom: 24,
                               child: AnimatedOpacity(
-                                opacity: _hovering ? 1.0 : 0.0,
+                                opacity: _notesHovering ? 1.0 : 0.0,
                                 duration: const Duration(milliseconds: 100),
                                 child: Container(
-                                  padding: const EdgeInsets.all(5.0),
+                                  width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   child: const Text(
-                                    'Click to add notes',
+                                    'Notes',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
+                                      color: Color(0xff00ADB5),
+                                      fontSize: 10.0,
                                     ),
                                   ),
                                 ),
@@ -338,7 +325,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onHover: (val) {
                           setState(() {
-                            _hovering = val;
+                            _notesHovering = val;
                           });
                         },
                       ),
@@ -347,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         onTap: () {
                           showDialog(context: context, builder: (context){
-                            return ReminderForm(userId: int.parse(widget.userId));
+                            return ReminderForm(userId: widget.userModel.userId);
                           });
                         },
                         child: Stack(
@@ -363,21 +350,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Positioned(
-                              top: -20,
+                              bottom: 24,
                               child: AnimatedOpacity(
-                                opacity: _hovering ? 1.0 : 0.0,
+                                opacity: _reminderHovering ? 1.0 : 0.0,
                                 duration: const Duration(milliseconds: 100),
                                 child: Container(
-                                  padding: const EdgeInsets.all(5.0),
+                                  width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   child: const Text(
-                                    'Click to add reminder',
+                                    'Reminder',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
+                                      color: Color(0xff00ADB5),
+                                      fontSize: 10.0,
                                     ),
                                   ),
                                 ),
@@ -387,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onHover: (val) {
                           setState(() {
-                            _hovering = val;
+                            _reminderHovering = val;
                           });
                         },
                       ),

@@ -41,7 +41,7 @@ class MyCalendarDataSource extends CalendarDataSource {
 
         appointments?.add(Appointment(
           startTime: date,
-          endTime: date,
+          endTime: date.add(Duration(minutes: 30)),
           subject: reminder.description,
           color: Colors.orange,
         ));
@@ -53,7 +53,7 @@ class MyCalendarDataSource extends CalendarDataSource {
     for (final task in tasks) {
       appointments?.add(Appointment(
         startTime: DateTime.parse("${task.taskDate} ${task.taskTime}"),
-        endTime: DateTime.parse("${task.taskDate} ${task.taskTime}"),
+        endTime: DateTime.parse("${task.taskDate} ${task.taskTime}").add(Duration(minutes: 30)),
         subject: task.taskTitle,
         notes: task.description ?? '',
         color: Colors.red,

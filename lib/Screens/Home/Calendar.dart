@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -27,8 +29,6 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    print("Calender");
-    print(widget.reminders[0].remainderDate);
     _dataSource = MyCalendarDataSource(
       events: widget.events,
       reminders: widget.reminders,
@@ -42,8 +42,8 @@ class _CalendarPageState extends State<CalendarPage> {
     "Week": CalendarView.week,
     "Schedule": CalendarView.schedule
   };
-  String? dropdownValue = 'Day';
-  CalendarView current = CalendarView.day;
+  String? dropdownValue = 'Month';
+  CalendarView current = CalendarView.month;
   final calendarController = CalendarController();
 
   String headerText = DateFormat('MMM, yyyy').format(DateTime.now());
@@ -120,20 +120,25 @@ class _CalendarPageState extends State<CalendarPage> {
             });
           },
           onTap: (details) {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(details.date.toString()),
-                  );
-                });
+
           },
-          monthViewSettings: const MonthViewSettings(
-            navigationDirection: MonthNavigationDirection.horizontal,
-            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-            dayFormat: 'EEE',
-          ),
+
+
+              monthViewSettings: const MonthViewSettings(
+                navigationDirection: MonthNavigationDirection.horizontal,
+                showAgenda: true,
+                dayFormat: 'EEE',
+              ),
+              scheduleViewSettings: ScheduleViewSettings(
+
+              ),
+              timeSlotViewSettings: TimeSlotViewSettings(
+                timeInterval: Duration(minutes: 60),
+                timeFormat: 'h:mm a',
+
+              ),
           initialDisplayDate: DateTime.now(),
+              initialSelectedDate: DateTime.now(),
         ))
       ],
     );

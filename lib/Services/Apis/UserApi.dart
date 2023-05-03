@@ -46,9 +46,12 @@ class UserApi{
     }
   }
   static Future<Response> postUser(Map<String, dynamic> user) async {
+
     String userApiUrl = "$baseUrl/api/users";
     try {
+
       http.Client client = http.Client();
+
       final response = await client.post(
         Uri.parse(userApiUrl),
         headers: <String, String>{
@@ -60,9 +63,9 @@ class UserApi{
     } catch (ex) {
       throw Exception('Response error: ${ex.toString()}');
     }
-
-
   }
+
+
   static Future<List<EventsModel>> getUserEvents(int userId) async{
     String userApiUrl = "$baseUrl/api/users/$userId/events";
     try{
