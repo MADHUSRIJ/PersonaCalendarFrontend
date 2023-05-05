@@ -6,8 +6,6 @@ import 'package:persona_calendar/Auth/Register.dart';
 import 'package:persona_calendar/Auth/SignIn.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Screens/Home/Home.dart';
-import 'package:persona_calendar/Screens/UsersList.dart';
-import 'package:persona_calendar/Services/NavigationState.dart';
 import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/sizeConfig.dart';
@@ -91,7 +89,7 @@ class MyApp extends StatelessWidget {
       }
       return UserModelRouting(
           userId: user
-              .displayName!); // Or the unique identifier you want to use for this user.
+              .displayName!);
     } else {
       return const SignIn();
     }

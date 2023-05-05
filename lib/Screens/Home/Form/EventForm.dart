@@ -56,7 +56,7 @@ class _EventsState extends State<Events> {
       initialTime: initialTime!,
     );
     if(selectedTime != null){
-      final time = DateFormat('hh:mm').format(DateTime(0, 0, 0, selectedTime.hour, selectedTime.minute));
+      final time = DateFormat('hh:mm a').format(DateTime(0, 0, 0, selectedTime.hour, selectedTime.minute));
       return time;
     }
     return "";

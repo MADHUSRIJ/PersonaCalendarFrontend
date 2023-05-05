@@ -122,47 +122,33 @@ class _HomePageState extends State<HomePage> {
       body: Row(
         children: [
           Expanded(
-              flex: 5,
+              flex: 4,
               child: SizedBox(
                 width: 250,
                 child: Drawer(
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
-                       UserAccountsDrawerHeader(
+                       Container(
                         decoration: const BoxDecoration(color: Color(0xff00ADB5)),
-                        accountName: Text(
-                          widget.userModel.userName,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20),
+                        padding: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.userModel.userName,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 20,color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(widget.userModel.email,
+                                style: const TextStyle(fontWeight: FontWeight.w300,color: Colors.white)),
+                          ],
                         ),
-                        accountEmail: Text(widget.userModel.email,
-                            style: const TextStyle(fontWeight: FontWeight.w300)),
-                        currentAccountPicture: const CircleAvatar(
-                          radius: 4,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Color(0xff393E46),
-                          ),
-                        ),
-                        currentAccountPictureSize: const Size(50, 50),
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(height: 10),
-                          CalendarDatePicker2WithActionButtons(
-                            config: config,
-                            value: rangeDatePickerWithActionButtonsWithValue,
-                            onValueChanged: (dates) => setState(() =>
-                                rangeDatePickerWithActionButtonsWithValue =
-                                    dates),
-                          ),
-                          const SizedBox(height: 25),
-                        ],
-                      )
+
                     ],
                   ),
                 ),

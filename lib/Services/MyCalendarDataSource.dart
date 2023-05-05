@@ -43,6 +43,7 @@ class MyCalendarDataSource extends CalendarDataSource {
           startTime: date,
           endTime: date.add(Duration(minutes: 30)),
           subject: reminder.description,
+          notes: '',
           color: Colors.orange,
         ));
       }
