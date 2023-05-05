@@ -9,7 +9,6 @@ import 'package:persona_calendar/Auth/GoogleSignIn.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
-import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +57,7 @@ class _RegisterState extends State<Register> {
         userIdText.text = userId.toString();
 
         // Use the ID in your Flutter code
-        print('Created userEvents with ID: $userId');
+        //print('Created userEvents with ID: $userId');
       } else {
         throw Exception('Failed to create userEvents: ${response.statusCode}');
       }
@@ -281,6 +280,9 @@ class _RegisterState extends State<Register> {
                                         if (value!.isEmpty && value == "") {
                                           return "Email should not be left empty";
                                         }
+                                        if(!(value.contains("@gmail.com"))){
+                                          return "Email not formatted correctly";
+                                        }
                                         return null;
                                       },
                                       autovalidateMode:
@@ -328,6 +330,11 @@ class _RegisterState extends State<Register> {
                                       validator: (value) {
                                         if (value!.isEmpty && value == "") {
                                           return "Mobile Number should not be left empty";
+                                        }
+
+                                        final numericRegex = RegExp(r'^-?[0-9]+$');
+                                        if(!(numericRegex.hasMatch(value))){
+                                          return "Mobile Number not formatted correctly";
                                         }
                                         return null;
                                       },
@@ -437,6 +444,10 @@ class _RegisterState extends State<Register> {
                                         validator: (value) {
                                           if (value!.isEmpty && value == "") {
                                             return "Confirm Password should not be left empty";
+                                          }
+
+                                          if(value != password.text){
+                                            return "Confirm password should be same as the password";
                                           }
                                           return null;
                                         },
@@ -598,7 +609,7 @@ class _RegisterState extends State<Register> {
                                   horizontal: SizeConfig.width! * 4),
                               child: GestureDetector(
                                 onTap: () {
-                                  googlesigninclass.googleLogin();
+                                  GoogleSignInClass.googleLogin();
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

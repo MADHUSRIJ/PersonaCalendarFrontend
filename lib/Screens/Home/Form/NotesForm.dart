@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Services/Apis/NotesApi.dart';
-import 'package:persona_calendar/Services/app_routes.dart';
-import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -47,7 +44,7 @@ class _NotesFormState extends State<NotesForm> {
         notesIdText.text = notesId.toString();
 
         // Use the ID in your Flutter code
-        print('Created userNotes with ID: $notesId');
+        //print('Created userNotes with ID: $notesId');
 
 
 
@@ -69,12 +66,12 @@ class _NotesFormState extends State<NotesForm> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
-      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
       content: Container(
         alignment: Alignment.center,
         height: SizeConfig.height!*50,
         width: SizeConfig.width!*42,
-        margin: EdgeInsets.symmetric(vertical: 30),
+        margin: const EdgeInsets.symmetric(vertical: 30),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
@@ -82,7 +79,7 @@ class _NotesFormState extends State<NotesForm> {
 
         ),
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: SizeConfig.height!*40,
             child: Column(
               children: [
@@ -109,87 +106,85 @@ class _NotesFormState extends State<NotesForm> {
                     1.4,Form(
                     key: formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
                               child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: notesTitle,
-                                    validator: (value) {
-                                      if (value!.isEmpty && value == "") {
-                                        return "Notes Title should not be left empty";
-                                      }
-                                      return null;
-                                    },
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    decoration:
-                                    InputDecoration(
-                                        hintText: "Notes Title",
-                                        errorMaxLines: 1,
-                                        prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
                                 ),
-                              )
-                          ),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                              child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
+                                child: TextFormField(
+                                  controller: notesTitle,
+                                  validator: (value) {
+                                    if (value!.isEmpty && value == "") {
+                                      return "Notes Title should not be left empty";
+                                    }
+                                    return null;
+                                  },
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration:
+                                  InputDecoration(
+                                      hintText: "Notes Title",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
                                   ),
-                                  child: TextFormField(
-                                    controller: notesDescription,
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: notesDescription,
 
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    decoration:
-                                    InputDecoration(
-                                        hintText: "Notes Description",
-                                        errorMaxLines: 1,
-                                        prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration:
+                                  InputDecoration(
+                                      hintText: "Notes Description",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
                                   ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
                                 ),
-                              )
-                          ),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                        ],
-                      ),
+                              ),
+                            )
+                        ),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                      ],
                     ),
                   ),
                   ),
@@ -213,9 +208,9 @@ class _NotesFormState extends State<NotesForm> {
 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Color(0xff00ADB5),
+                            color: const Color(0xff00ADB5),
                           ),
-                          child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
+                          child: const Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
                         ),
                       ),
                     ),

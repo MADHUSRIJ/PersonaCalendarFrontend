@@ -36,17 +36,17 @@ class _ReminderFormState extends State<ReminderForm> {
     );
     if (picked != null) {
       final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
-      print(formattedDate);
+      //print(formattedDate);
       return formattedDate;
     }
     return "";
   }
 
   Future<String?> _selectTime() async {
-    final TimeOfDay? initialTime = TimeOfDay.now();
+    final TimeOfDay initialTime = TimeOfDay.now();
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: initialTime!,
+      initialTime: initialTime,
     );
     if(selectedTime != null){
       final time = DateFormat('hh:mm a').format(DateTime(0, 0, 0, selectedTime.hour, selectedTime.minute));
@@ -77,7 +77,7 @@ class _ReminderFormState extends State<ReminderForm> {
         int reminderId = responseBody['reminderId'];
         reminderIdText.text = reminderId.toString();
         // Use the ID in your Flutter code
-        print('Created userReminder with ID: $reminderId');
+        //print('Created userReminder with ID: $reminderId');
 
 
 
@@ -99,12 +99,12 @@ class _ReminderFormState extends State<ReminderForm> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
-      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
       content: Container(
         alignment: Alignment.center,
         height: SizeConfig.height!*80,
         width: SizeConfig.width!*42,
-        margin: EdgeInsets.symmetric(vertical: 30),
+        margin: const EdgeInsets.symmetric(vertical: 30),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
@@ -112,7 +112,7 @@ class _ReminderFormState extends State<ReminderForm> {
 
         ),
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: SizeConfig.height!*70,
             child: Column(
               children: [
@@ -139,159 +139,157 @@ class _ReminderFormState extends State<ReminderForm> {
                     1.4,Form(
                     key: formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
                               child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: reminderDescription,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration:
+                                  InputDecoration(
+                                      hintText: "Reminder Description",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
                                   ),
-                                  child: TextFormField(
-                                    controller: reminderDescription,
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    decoration:
-                                    InputDecoration(
-                                        hintText: "Reminder Description",
-                                        errorMaxLines: 1,
-                                        prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                          child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: reminderDate,
+                                  decoration: InputDecoration(
+                                      hintText: "Reminder date",
+                                      errorMaxLines: 1,
+                                      prefix: SizedBox(
+                                        height: 20,
+                                        width: 10,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            reminderDate.text = (await _showDatePicker());
+
+                                          },
+
+                                        ),
+                                      ),
+                                      prefixIcon: const Icon(Icons.calendar_today,color: Colors.grey,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
                                   ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
                                 ),
                               )
-                          ),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                            child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: reminderDate,
-                                    decoration: InputDecoration(
-                                        hintText: "Reminder date",
-                                        errorMaxLines: 1,
-                                        prefix: Container(
-                                          height: 20,
-                                          width: 10,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              reminderDate.text = (await _showDatePicker());
-
-                                            },
-
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.calendar_today,color: Colors.grey,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
-                                )
-                            ),),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                            child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: reminderTime,
-                                    decoration: InputDecoration(
-                                        hintText: "Reminder Time",
-                                        errorMaxLines: 1,
-                                        prefix: Container(
-                                          height: 20,
-                                          width: 10,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              reminderTime.text = (await _selectTime())!;
-
-                                            },
-
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.timelapse,color: Colors.grey,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
-                                )
-                            ),),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
+                          ),),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                          child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
                               child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                padding: EdgeInsets.symmetric(horizontal: SizeConfig.width!*2),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.centerLeft,
                                 decoration: BoxDecoration(
-                                    border: Border.all(width: 0.5, color: Colors.grey.shade500),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButton<String>(
-                                  hint: Text("Occurance"),
-                                  value: dropdownValue,
-                                  onChanged: (newValue){
-                                    setState(() {
-                                      dropdownValue = newValue!;
-                                    });
-                                  },
-                                  dropdownColor: Colors.white,
-                                  elevation: 0,
-                                  items: <String>['Does not repeat','Daily', 'Weekly', 'Monthly', 'Annually']
-                                      .map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
                                 ),
-                              )),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                        ],
-                      ),
+                                child: TextFormField(
+                                  controller: reminderTime,
+                                  decoration: InputDecoration(
+                                      hintText: "Reminder Time",
+                                      errorMaxLines: 1,
+                                      prefix: SizedBox(
+                                        height: 20,
+                                        width: 10,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            reminderTime.text = (await _selectTime())!;
+
+                                          },
+
+                                        ),
+                                      ),
+                                      prefixIcon: const Icon(Icons.timelapse,color: Colors.grey,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              )
+                          ),),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              padding: EdgeInsets.symmetric(horizontal: SizeConfig.width!*2),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.centerLeft,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 0.5, color: Colors.grey.shade500),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownButton<String>(
+                                hint: const Text("Occurance"),
+                                value: dropdownValue,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                },
+                                dropdownColor: Colors.white,
+                                elevation: 0,
+                                items: <String>['Does not repeat','Daily', 'Weekly', 'Monthly', 'Annually']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            )),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                      ],
                     ),
                   ),
                   ),
@@ -318,9 +316,9 @@ class _ReminderFormState extends State<ReminderForm> {
 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Color(0xff00ADB5),
+                            color: const Color(0xff00ADB5),
                           ),
-                          child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
+                          child: const Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
                         ),
                       ),
                     ),

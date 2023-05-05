@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -57,8 +57,8 @@ class _RoutingState extends State<Routing> {
               page: () => UserModelRouting(
                   userId: FirebaseAuth.instance.currentUser!.displayName!)),
           GetPage(name: AppRoutes.MyApp, page: () => MyApp()),
-          GetPage(name: AppRoutes.SignIn, page: () => SignIn()),
-          GetPage(name: AppRoutes.Register, page: () => Register()),
+          GetPage(name: AppRoutes.SignIn, page: () => const SignIn()),
+          GetPage(name: AppRoutes.Register, page: () => const Register()),
         ],
       ),
     );
@@ -133,11 +133,11 @@ class MyApp extends StatelessWidget {
                   });
             }
 
-            return Center(
-                child: Container(
+            return const Center(
+                child: SizedBox(
                     height: 48,
                     width: 48,
-                    child: const CircularProgressIndicator()));
+                    child: CircularProgressIndicator()));
           },
         ),
       ),
@@ -168,7 +168,7 @@ class _UserModelRoutingState extends State<UserModelRouting> {
     userModel!.userReminder = map["Reminder"];
     userModel!.userNotes = map["Notes"];
 
-    print("UserModel ${userModel!.userName}");
+    //print("UserModel ${userModel!.userName}");
     setState(() {
       initialized = true;
     });
@@ -187,10 +187,10 @@ class _UserModelRoutingState extends State<UserModelRouting> {
         ? HomePage(
       userModel: userModel!,
           )
-        : Center(
-            child: Container(
+        : const Center(
+            child: SizedBox(
                 height: 48,
                 width: 48,
-                child: const CircularProgressIndicator()));
+                child: CircularProgressIndicator()));
   }
 }

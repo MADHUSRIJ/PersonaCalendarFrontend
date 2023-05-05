@@ -11,7 +11,6 @@ import 'package:persona_calendar/Services/MyCalendarDataSource.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CalendarPage extends StatefulWidget {
   final List<EventsModel> events;
@@ -112,7 +111,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               )),
-              Expanded(child: SizedBox()),
+              const Expanded(
+                flex: 2,
+                  child: SizedBox()),
               Expanded(
                 flex: 2,
                 child: Container(
@@ -240,7 +241,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             color: appointment.color,
                           ),
                           padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +249,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 Expanded(
                                   child: Text(
                                     appointmentSubject,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         decoration: TextDecoration.lineThrough,
                                         color: Colors.white),
                                   ),
@@ -260,7 +261,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                     : Expanded(
                                         child: Text(
                                         "$startTime - $endTime",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             color: Colors.white),
@@ -276,7 +277,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             color: appointment.color,
                           ),
                           padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                              const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,7 +285,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               Expanded(
                                 child: Text(
                                   appointmentSubject,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                               current == CalendarView.day ||
@@ -294,7 +295,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : Expanded(
                                       child: Text(
                                         "$startTime - $endTime",
-                                        style: TextStyle(color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
                                       ),
                                     )
                             ],
@@ -309,8 +310,8 @@ class _CalendarPageState extends State<CalendarPage> {
                     showAgenda: true,
                     dayFormat: 'EEE',
                   ),
-                  scheduleViewSettings: ScheduleViewSettings(),
-                  timeSlotViewSettings: TimeSlotViewSettings(
+                  scheduleViewSettings: const ScheduleViewSettings(),
+                  timeSlotViewSettings: const TimeSlotViewSettings(
                     timeInterval: Duration(minutes: 60),
                     timeFormat: 'h:mm a',
                   ),

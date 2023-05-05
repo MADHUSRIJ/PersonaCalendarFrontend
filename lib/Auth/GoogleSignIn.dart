@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -8,7 +6,7 @@ import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/main.dart';
 import 'package:http/http.dart' as http;
 
-class googlesigninclass
+class GoogleSignInClass
 {
   static final googleSignIn = GoogleSignIn(
     scopes: [
@@ -41,7 +39,7 @@ class googlesigninclass
       await FirebaseAuth.instance.signInWithCredential(credential).whenComplete(() async{
 
         Map<String, dynamic>? userMap;
-        userMap = Map<String,dynamic>();
+        userMap = <String,dynamic>{};
         userMap["userName"] = _user!.displayName!;
         userMap["mobile"] = "0";
         userMap["email"] = _user!.email;
@@ -57,7 +55,7 @@ class googlesigninclass
           // Extract the ID from the response body
           int userId = responseBody['userId'];
 
-          print("Hey $userId");
+          //print("Hey $userId");
 
           User? user = FirebaseAuth.instance.currentUser!;
           user.updateDisplayName(userId.toString());
@@ -67,7 +65,7 @@ class googlesigninclass
       });
     }
     catch(ex){
-      print("Google "+ex.toString());
+      throw Exception(ex) ;
     }
 
 

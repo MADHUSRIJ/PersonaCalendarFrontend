@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:persona_calendar/Animation/animation.dart';
-import 'package:persona_calendar/Auth/Register.dart';
 import 'package:persona_calendar/Auth/GoogleSignIn.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
-import 'package:persona_calendar/Services/NavigationState.dart';
-import 'package:persona_calendar/Services/Apis/UserApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
-import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +38,10 @@ class _SignInState extends State<SignIn> {
 
   Future<String?> _loginAccount() async {
     try {
-      final User? currentUser =
-          (await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
         password: hashedPassword.text,
-      ))
-              .user;
+      );
 
       return null;
     } on FirebaseAuthException catch (e) {
@@ -97,7 +91,7 @@ class _SignInState extends State<SignIn> {
     if (feedback != null) {
       _alertDialogBox(feedback);
     } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+      Get.toNamed(AppRoutes.MyApp);
     }
   }
 
@@ -200,6 +194,11 @@ class _SignInState extends State<SignIn> {
                                       if (value!.isEmpty && value == "") {
                                         return "Email should not be left empty";
                                       }
+
+                                      if (!(value.contains("@gmail.com"))) {
+                                        return "Email not formatted correctly";
+                                      }
+
                                       return null;
                                     },
                                     autovalidateMode:
@@ -405,7 +404,7 @@ class _SignInState extends State<SignIn> {
                                 horizontal: SizeConfig.width! * 4),
                             child: GestureDetector(
                               onTap: () {
-                                googlesigninclass.googleLogin();
+                                GoogleSignInClass.googleLogin();
                               },
                               child: Container(
                                 alignment: Alignment.center,

@@ -37,17 +37,17 @@ class _TasksFormState extends State<TasksForm> {
     );
     if (picked != null) {
       final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
-      print(formattedDate);
+      //print(formattedDate);
       return formattedDate;
     }
     return "";
   }
 
   Future<String?> _selectTime() async {
-    final TimeOfDay? initialTime = TimeOfDay.now();
+    final TimeOfDay initialTime = TimeOfDay.now();
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: initialTime!,
+      initialTime: initialTime,
     );
     if(selectedTime != null){
       final time = DateFormat('hh:mm a').format(DateTime(0, 0, 0, selectedTime.hour, selectedTime.minute));
@@ -79,7 +79,7 @@ class _TasksFormState extends State<TasksForm> {
         int taskId = responseBody['taskId'];
         tasksIdText.text = taskId.toString();
         // Use the ID in your Flutter code
-        print('Created userTask with ID: $taskId');
+        //print('Created userTask with ID: $taskId');
 
 
 
@@ -101,12 +101,12 @@ class _TasksFormState extends State<TasksForm> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
-      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
       content: Container(
         alignment: Alignment.center,
         height: SizeConfig.height!*100,
         width: SizeConfig.width!*42,
-        margin: EdgeInsets.symmetric(vertical: 30),
+        margin: const EdgeInsets.symmetric(vertical: 30),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
@@ -114,7 +114,7 @@ class _TasksFormState extends State<TasksForm> {
 
         ),
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: SizeConfig.height!*90,
             child: Column(
               children: [
@@ -141,193 +141,191 @@ class _TasksFormState extends State<TasksForm> {
                     1.4,Form(
                     key: formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
                               child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: taskTitle,
+                                  validator: (value) {
+                                    if (value!.isEmpty && value == "") {
+                                      return "Task Title should not be left empty";
+                                    }
+                                    return null;
+                                  },
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration:
+                                  InputDecoration(
+                                      hintText: "Task Title",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
                                   ),
-                                  child: TextFormField(
-                                    controller: taskTitle,
-                                    validator: (value) {
-                                      if (value!.isEmpty && value == "") {
-                                        return "Task Title should not be left empty";
-                                      }
-                                      return null;
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: taskDescription,
+
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration:
+                                  InputDecoration(
+                                      hintText: "Task Description",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                          child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: taskDate,
+                                  decoration: InputDecoration(
+                                      hintText: "Task date",
+                                      errorMaxLines: 1,
+                                      prefix: SizedBox(
+                                        height: 20,
+                                        width: 10,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            taskDate.text = (await _showDatePicker());
+
+                                          },
+
+                                        ),
+                                      ),
+                                      prefixIcon: const Icon(Icons.calendar_today,color: Colors.grey,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              )
+                          ),),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                          child: Container(
+                              padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5,color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: TextFormField(
+                                  controller: taskTime,
+                                  decoration: InputDecoration(
+                                      hintText: "Task Time",
+                                      errorMaxLines: 1,
+                                      prefix: SizedBox(
+                                        height: 20,
+                                        width: 10,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            taskTime.text = (await _selectTime())!;
+
+                                          },
+
+                                        ),
+                                      ),
+                                      prefixIcon: const Icon(Icons.timelapse,color: Colors.grey,),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              )
+                          ),),
+
+                        SizedBox(height: SizeConfig.height! * 2,),
+                        Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  const Text("Send Notification"),
+                                  Checkbox(
+                                    value: isChecked,
+                                    activeColor: const Color(0xff00ADB5),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isChecked = value!;
+                                      });
                                     },
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    decoration:
-                                    InputDecoration(
-                                        hintText: "Task Title",
-                                        errorMaxLines: 1,
-                                        prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                              )
-                          ),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                              child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: taskDescription,
 
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    decoration:
-                                    InputDecoration(
-                                        hintText: "Task Description",
-                                        errorMaxLines: 1,
-                                        prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
                                   ),
-                                ),
-                              )
-                          ),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                            child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: taskDate,
-                                    decoration: InputDecoration(
-                                        hintText: "Task date",
-                                        errorMaxLines: 1,
-                                        prefix: Container(
-                                          height: 20,
-                                          width: 10,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              taskDate.text = (await _showDatePicker())!;
-
-                                            },
-
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.calendar_today,color: Colors.grey,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
-                                )
-                            ),),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                            child: Container(
-                                padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextFormField(
-                                    controller: taskTime,
-                                    decoration: InputDecoration(
-                                        hintText: "Task Time",
-                                        errorMaxLines: 1,
-                                        prefix: Container(
-                                          height: 20,
-                                          width: 10,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              taskTime.text = (await _selectTime())!;
-
-                                            },
-
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.timelapse,color: Colors.grey,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 20),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: SizeConfig.height! * 2.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: SizeConfig.height! * 2,
-                                        color: Colors.black),
-                                  ),
-                                )
-                            ),),
-
-                          SizedBox(height: SizeConfig.height! * 2,),
-                          Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                                height: SizeConfig.height! * 4,
-                                alignment: Alignment.center,
-                                child: Row(
-                                  children: [
-                                    Text("Send Notification"),
-                                    Checkbox(
-                                      value: isChecked,
-                                      activeColor: Color(0xff00ADB5),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isChecked = value!;
-                                        });
-                                      },
-
-                                    ),
-                                  ],
-                                ),
-                              )),
-                          SizedBox(height: SizeConfig.height! * 2,),
-                        ],
-                      ),
+                                ],
+                              ),
+                            )),
+                        SizedBox(height: SizeConfig.height! * 2,),
+                      ],
                     ),
                   ),
                   ),
@@ -351,9 +349,9 @@ class _TasksFormState extends State<TasksForm> {
 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Color(0xff00ADB5),
+                            color: const Color(0xff00ADB5),
                           ),
-                          child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
+                          child: const Text("Submit",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),),
                         ),
                       ),
                     ),
