@@ -81,18 +81,25 @@ class MyApp extends StatelessWidget {
   Future<Widget> _authorize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? displayName = prefs.getString('displayName');
-    User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
-      if (displayName == null) {
-        await prefs.setString('displayName', user.displayName!);
-      }
-      return UserModelRouting(
-          userId: user
-              .displayName!);
-    } else {
-      return const SignIn();
-    }
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+              child: SizedBox(
+                  height: 48, width: 48, child: CircularProgressIndicator()));
+        } else if (snapshot.hasData) {
+          if (displayName == null) {
+            prefs.setString('displayName', snapshot.data!.displayName!);
+          }
+
+          return UserModelRouting(userId: snapshot.data!.displayName!);
+        } else {
+          return const SignIn();
+        }
+      },
+    );
   }
 
   @override
@@ -125,8 +132,10 @@ class MyApp extends StatelessWidget {
                           return snapshot.data!;
                         } else {
                           return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+                              child: SizedBox(
+                                  height: 48,
+                                  width: 48,
+                                  child: CircularProgressIndicator()));
                         }
                       },
                     );
@@ -135,9 +144,7 @@ class MyApp extends StatelessWidget {
 
             return const Center(
                 child: SizedBox(
-                    height: 48,
-                    width: 48,
-                    child: CircularProgressIndicator()));
+                    height: 48, width: 48, child: CircularProgressIndicator()));
           },
         ),
       ),
@@ -185,12 +192,10 @@ class _UserModelRoutingState extends State<UserModelRouting> {
   Widget build(BuildContext context) {
     return initialized
         ? HomePage(
-      userModel: userModel!,
+            userModel: userModel!,
           )
         : const Center(
             child: SizedBox(
-                height: 48,
-                width: 48,
-                child: CircularProgressIndicator()));
+                height: 48, width: 48, child: CircularProgressIndicator()));
   }
 }

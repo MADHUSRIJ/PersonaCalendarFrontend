@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Services/Apis/TasksApi.dart';
+import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 
 
@@ -338,9 +340,16 @@ class _TasksFormState extends State<TasksForm> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                       child: GestureDetector(
-                        onTap: () {
-                          if(submitForm() != ""){
+                        onTap: ()  async {
+                          int errorMessage =  await submitForm();
+                          if (errorMessage!=0) {
                             Navigator.pop(context);
+                            Get.off(MyApp());
+                          } else {
+                            // if there's an error, display an error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Error creating notes")),
+                            );
                           }
                         },
                         child: Container(

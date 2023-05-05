@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persona_calendar/Animation/animation.dart';
 import 'package:persona_calendar/Services/Apis/EventsApi.dart';
+import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
 
 
@@ -68,7 +70,6 @@ class _EventsState extends State<Events> {
         "endDate": endDate.text,
         "startTime": startTime.text,
         "endTime": endTime.text,
-        "eventOccurance": "NA",
         "location" : location.text,
         "eventNotification": isChecked,
         "userId" : widget.userId,
@@ -421,35 +422,6 @@ class _EventsState extends State<Events> {
                             )
                         ),
                         SizedBox(height: SizeConfig.height! * 2,),
-                        /*Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                              padding: EdgeInsets.symmetric(horizontal: SizeConfig.width!*2),
-                              height: SizeConfig.height! * 4,
-                              alignment: Alignment.centerLeft,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5, color: Colors.grey.shade500),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButton<String>(
-                                hint: const Text("Occurance"),
-                                value: dropdownValue,
-                                onChanged: (newValue){
-                                  setState(() {
-                                    dropdownValue = newValue!;
-                                  });
-                                },
-                                dropdownColor: Colors.white,
-                                elevation: 0,
-                                items: <String>['Does not repeat','Daily', 'Weekly', 'Monthly', 'Annually']
-                                    .map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            )),
-                        SizedBox(height: SizeConfig.height! * 2,),*/
                         Expanded(
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
@@ -485,9 +457,16 @@ class _EventsState extends State<Events> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                       child: GestureDetector(
-                        onTap: () {
-                          if(submitForm() != ""){
+                        onTap: ()  async {
+                          String errorMessage =  await submitForm();
+                          if (errorMessage.isEmpty) {
                             Navigator.pop(context);
+                            Get.off(MyApp());
+                          } else {
+                            // if there's an error, display an error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Error creating notes")),
+                            );
                           }
                         },
                         child: Container(

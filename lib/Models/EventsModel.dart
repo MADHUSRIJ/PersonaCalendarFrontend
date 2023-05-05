@@ -7,7 +7,6 @@ class EventsModel with ChangeNotifier {
   String? _endDate;
   String? _startTime;
   String? _endTime;
-  String? _occurance;
   String? _location;
   String? _description;
   String? _access;
@@ -19,7 +18,6 @@ class EventsModel with ChangeNotifier {
   String get endDate => _endDate!;
   String get startTime => _startTime!;
   String get endTime => _endTime!;
-  String get occurance => _occurance!;
   String get location => _location!;
   String get description => _description!;
   bool get notification => _notification!;
@@ -32,7 +30,6 @@ class EventsModel with ChangeNotifier {
       this._endDate,
       this._startTime,
       this._endTime,
-      this._occurance,
       this._location,
       this._description,
       this._notification,
@@ -44,7 +41,6 @@ class EventsModel with ChangeNotifier {
       this._endDate,
       this._startTime,
       this._endTime,
-      this._occurance,
       this._location,
       this._description,
       this._notification,this._access);
@@ -56,7 +52,6 @@ class EventsModel with ChangeNotifier {
     _endDate = object["endDate"];
     _startTime = object["startTime"];
     _endTime = object["endTime"];
-    _occurance = object["eventOccurance"];
     _location = object["location"];
     _description = object["eventDescription"];
     _notification = object["eventNotification"];
@@ -71,7 +66,6 @@ class EventsModel with ChangeNotifier {
     map["endDate"] = _endDate;
     map["startTime"] = _startTime;
     map["endTime"] = _endTime;
-    map["eventOccurance"] = _occurance;
     map["location"] = _location;
     map["eventDescription"] = _description;
     map["eventNotification"] = _notification;

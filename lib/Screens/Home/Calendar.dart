@@ -82,15 +82,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   final ExportDelegate exportDelegate = ExportDelegate();
 
-/*
-  Future<void> saveFile(document, String name) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final  file = html.File('${dir.path}/$name.pdf');
-
-    await file.writeAsBytes(await document.save());
-    debugPrint('Saved exported PDF at: ${file.path}');
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +119,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       border:
-                          Border.all(width: 0.5, color: Colors.grey.shade500),
+                          Border.all(width: 0.5, color: Colors.transparent),
                       borderRadius: BorderRadius.circular(10)),
                   child: DropdownButton<String>(
                     hint: const Text("Calendar Type"),
@@ -155,13 +146,13 @@ class _CalendarPageState extends State<CalendarPage> {
               Expanded(
                   child: GestureDetector(
                 onTap: () async {
-                  _captureAndConvertToPdf();
+                  await _captureAndConvertToPdf();
                 },
                 child: Container(
                     color: Colors.transparent,
-                    child: const Text(
+                    child:  Text(
                       "Save",
-                      style: TextStyle(color: Color(0xff00ADB5)),
+                      style: GoogleFonts.poppins(color: Color(0xff00ADB5)),
                     )),
               )),
             ],
@@ -249,7 +240,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 Expanded(
                                   child: Text(
                                     appointmentSubject,
-                                    style: const TextStyle(
+                                    style:  GoogleFonts.poppins(
                                         decoration: TextDecoration.lineThrough,
                                         color: Colors.white,fontSize: 12),
                                   ),
@@ -261,7 +252,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                     : Expanded(
                                         child: Text(
                                         "$startTime - $endTime",
-                                        style: const TextStyle(
+                                        style:  GoogleFonts.poppins(
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             color: Colors.white),
@@ -285,7 +276,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               Expanded(
                                 child: Text(
                                   appointmentSubject,
-                                  style: const TextStyle(color: Colors.white,fontSize: 12),
+                                  style:  GoogleFonts.poppins(color: Colors.white,fontSize: 12),
                                 ),
                               ),
                               current == CalendarView.day ||
@@ -295,7 +286,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : Expanded(
                                       child: Text(
                                         "$startTime - $endTime",
-                                        style: const TextStyle(color: Colors.white),
+                                        style:  GoogleFonts.poppins(color: Colors.white),
                                       ),
                                     )
                             ],

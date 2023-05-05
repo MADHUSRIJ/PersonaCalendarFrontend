@@ -79,8 +79,6 @@ class UserModel with ChangeNotifier{
     map["mobile"] = _mobile;
     map["email"] = _email;
     map["hashedPassword"] = _hashedPassword;
-
-    print("Hello");
     return map;
   }
 

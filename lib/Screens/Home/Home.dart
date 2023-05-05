@@ -112,14 +112,15 @@ class _HomePageState extends State<HomePage> {
                         height: 44,
                         alignment: Alignment.center,
                         child: RichText(
-                          text: const TextSpan(
-                            style: TextStyle(
+                          text: TextSpan(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500, fontSize: 24),
                             children: <TextSpan>[
                               TextSpan(
                                   text: 'Persona',
-                                  style: TextStyle(color: Color(0xff00ADB5))),
-                              TextSpan(text: ' Calendar'),
+                                  style: GoogleFonts.poppins(
+                                      color: const Color(0xff00ADB5))),
+                              const TextSpan(text: ' Calendar'),
                             ],
                           ),
                         ),
@@ -134,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               widget.userModel.userName,
-                              style: const TextStyle(
+                              style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 20,
                                   color: Colors.white),
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                               height: 8,
                             ),
                             Text(widget.userModel.email,
-                                style: const TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300,
                                     color: Colors.white)),
                           ],
@@ -202,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                                                     .contains(search.text
                                                         .toLowerCase())) &&
                                             (DateTime.parse(
-                                                    "${events.startDate} ${events.startTime.substring(0,5)}")
+                                                    "${events.startDate} ${events.startTime.substring(0, 5)}")
                                                 .isAfter(DateTime.now()))),
                                     child: LayoutBuilder(
                                       builder: (context, constraints) =>
@@ -299,12 +300,47 @@ class _HomePageState extends State<HomePage> {
                                                                         milliseconds:
                                                                             100),
                                                                 child:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .more_vert,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 16,
+                                                                    PopupMenuButton<
+                                                                        String>(
+                                                                  itemBuilder:
+                                                                      (context) =>
+                                                                          [
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'edit',
+                                                                      child:
+                                                                          Text(
+                                                                        'Edit',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'delete',
+                                                                      child:
+                                                                          Text(
+                                                                        'Delete',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // handle menu item selection here
+                                                                    print(
+                                                                        'Selected: $value');
+                                                                  },
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    color: Colors.white,
+                                                                    size: 16,
+                                                                  ),
                                                                 ),
                                                               ))
                                                             ],
@@ -369,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                                                     .contains(search.text
                                                         .toLowerCase())) &&
                                             (DateTime.parse(
-                                                    "${task.taskDate} ${task.taskTime.substring(0,5)}")
+                                                    "${task.taskDate} ${task.taskTime.substring(0, 5)}")
                                                 .isAfter(DateTime.now()))),
                                     child: LayoutBuilder(
                                       builder: (context, constraints) =>
@@ -392,7 +428,7 @@ class _HomePageState extends State<HomePage> {
                                                         .contains(search.text
                                                             .toLowerCase())) &&
                                                 (DateTime.parse(
-                                                        "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime.substring(0,5)}")
+                                                        "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime.substring(0, 5)}")
                                                     .isAfter(DateTime.now()));
                                             return taskContains
                                                 ? InkWell(
@@ -464,12 +500,47 @@ class _HomePageState extends State<HomePage> {
                                                                         milliseconds:
                                                                             100),
                                                                 child:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .more_vert,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 16,
+                                                                    PopupMenuButton<
+                                                                        String>(
+                                                                  itemBuilder:
+                                                                      (context) =>
+                                                                          [
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'edit',
+                                                                      child:
+                                                                          Text(
+                                                                        'Edit',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'delete',
+                                                                      child:
+                                                                          Text(
+                                                                        'Delete',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // handle menu item selection here
+                                                                    print(
+                                                                        'Selected: $value');
+                                                                  },
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    color: Colors.white,
+                                                                    size: 16,
+                                                                  ),
                                                                 ),
                                                               ))
                                                             ],
@@ -604,12 +675,47 @@ class _HomePageState extends State<HomePage> {
                                                                         milliseconds:
                                                                             100),
                                                                 child:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .more_vert,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 16,
+                                                                    PopupMenuButton<
+                                                                        String>(
+                                                                  itemBuilder:
+                                                                      (context) =>
+                                                                          [
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'edit',
+                                                                      child:
+                                                                          Text(
+                                                                        'Edit',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                    PopupMenuItem(
+                                                                      value:
+                                                                          'delete',
+                                                                      child:
+                                                                          Text(
+                                                                        'Delete',
+                                                                        style: GoogleFonts.poppins(
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // handle menu item selection here
+                                                                    print(
+                                                                        'Selected: $value');
+                                                                  },
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    color: Colors.white,
+                                                                    size: 16,
+                                                                  ),
                                                                 ),
                                                               ))
                                                             ],
@@ -735,17 +841,49 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               Expanded(
                                                   child: AnimatedOpacity(
-                                                opacity: notesHoverList[index]
-                                                    ? 1.0
-                                                    : 0.0,
-                                                duration: const Duration(
-                                                    milliseconds: 100),
-                                                child: const Icon(
-                                                  Icons.more_vert,
-                                                  color: Color(0xff00ADB5),
-                                                  size: 16,
-                                                ),
-                                              ))
+                                                      opacity:
+                                                          notesHoverList[index]
+                                                              ? 1.0
+                                                              : 0.0,
+                                                      duration: const Duration(
+                                                          milliseconds: 100),
+                                                      child: PopupMenuButton<
+                                                          String>(
+                                                        itemBuilder:
+                                                            (context) => [
+                                                          PopupMenuItem(
+                                                            value: 'edit',
+                                                            child: Text(
+                                                              'Edit',
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                      fontSize:
+                                                                          12),
+                                                            ),
+                                                          ),
+                                                          PopupMenuItem(
+                                                            value: 'delete',
+                                                            child: Text(
+                                                              'Delete',
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                      fontSize:
+                                                                          12),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                        onSelected: (value) {
+                                                          // handle menu item selection here
+                                                          print(
+                                                              'Selected: $value');
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.more_vert,
+                                                          color:
+                                                              Color(0xff00ADB5),
+                                                          size: 16,
+                                                        ),
+                                                      )))
                                             ],
                                           )),
                                           Expanded(
@@ -823,10 +961,10 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'Event',
-                                    style: TextStyle(
-                                      color: Color(0xff00ADB5),
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xff00ADB5),
                                       fontSize: 10.0,
                                     ),
                                   ),
@@ -875,10 +1013,10 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'Task',
-                                    style: TextStyle(
-                                      color: Color(0xff00ADB5),
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xff00ADB5),
                                       fontSize: 10.0,
                                     ),
                                   ),
@@ -927,10 +1065,10 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'Notes',
-                                    style: TextStyle(
-                                      color: Color(0xff00ADB5),
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xff00ADB5),
                                       fontSize: 10.0,
                                     ),
                                   ),
@@ -979,10 +1117,10 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'Reminder',
-                                    style: TextStyle(
-                                      color: Color(0xff00ADB5),
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xff00ADB5),
                                       fontSize: 10.0,
                                     ),
                                   ),
