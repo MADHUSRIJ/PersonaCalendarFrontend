@@ -18,7 +18,7 @@ class Events extends StatefulWidget {
 
 class _EventsState extends State<Events> {
   final formKey = GlobalKey<FormState>();
-  String dropdownValue = 'Does not repeat';
+  //String dropdownValue = 'Does not repeat';
   bool isChecked = false;
   Map<String, dynamic>? eventsMap;
 
@@ -35,7 +35,7 @@ class _EventsState extends State<Events> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
@@ -68,7 +68,7 @@ class _EventsState extends State<Events> {
         "endDate": endDate.text,
         "startTime": startTime.text,
         "endTime": endTime.text,
-        "eventOccurance": dropdownValue,
+        "eventOccurance": "NA",
         "location" : location.text,
         "eventNotification": isChecked,
         "userId" : widget.userId,
@@ -167,7 +167,7 @@ class _EventsState extends State<Events> {
                                   InputDecoration(
                                       hintText: "Event Title",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.event_available_rounded,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(
@@ -201,7 +201,7 @@ class _EventsState extends State<Events> {
                                   InputDecoration(
                                       hintText: "Event Description",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.description,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(
@@ -404,7 +404,7 @@ class _EventsState extends State<Events> {
                                   InputDecoration(
                                       hintText: "Location",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.phone,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.location_on_rounded,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(
@@ -421,7 +421,7 @@ class _EventsState extends State<Events> {
                             )
                         ),
                         SizedBox(height: SizeConfig.height! * 2,),
-                        Expanded(
+                        /*Expanded(
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
                               padding: EdgeInsets.symmetric(horizontal: SizeConfig.width!*2),
@@ -449,7 +449,7 @@ class _EventsState extends State<Events> {
                                 }).toList(),
                               ),
                             )),
-                        SizedBox(height: SizeConfig.height! * 2,),
+                        SizedBox(height: SizeConfig.height! * 2,),*/
                         Expanded(
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),

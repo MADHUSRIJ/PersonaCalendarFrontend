@@ -31,7 +31,7 @@ class _ReminderFormState extends State<ReminderForm> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
@@ -159,7 +159,7 @@ class _ReminderFormState extends State<ReminderForm> {
                                   InputDecoration(
                                       hintText: "Reminder Description",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.alarm,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(

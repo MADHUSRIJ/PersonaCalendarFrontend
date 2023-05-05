@@ -132,7 +132,7 @@ class _NotesFormState extends State<NotesForm> {
                                   InputDecoration(
                                       hintText: "Notes Title",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.notes,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(
@@ -167,7 +167,7 @@ class _NotesFormState extends State<NotesForm> {
                                   InputDecoration(
                                       hintText: "Notes Description",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.description,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(

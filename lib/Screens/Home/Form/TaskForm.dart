@@ -32,7 +32,7 @@ class _TasksFormState extends State<TasksForm> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
@@ -166,7 +166,7 @@ class _TasksFormState extends State<TasksForm> {
                                   InputDecoration(
                                       hintText: "Task Title",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.person,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.task_alt,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(
@@ -201,7 +201,7 @@ class _TasksFormState extends State<TasksForm> {
                                   InputDecoration(
                                       hintText: "Task Description",
                                       errorMaxLines: 1,
-                                      prefixIcon: Icon(Icons.mail,size: SizeConfig.height! * 3,),
+                                      prefixIcon: Icon(Icons.description,size: SizeConfig.height! * 3,),
                                       contentPadding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 20),
                                       hintStyle: GoogleFonts.poppins(

@@ -237,11 +237,11 @@ class _CalendarPageState extends State<CalendarPage> {
                         return Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: appointment.color),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(2),
                             color: appointment.color,
                           ),
                           padding:
-                              const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +251,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                     appointmentSubject,
                                     style: const TextStyle(
                                         decoration: TextDecoration.lineThrough,
-                                        color: Colors.white),
+                                        color: Colors.white,fontSize: 12),
                                   ),
                                 ),
                                 current == CalendarView.day ||
@@ -273,11 +273,11 @@ class _CalendarPageState extends State<CalendarPage> {
                         return Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: appointment.color),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(2),
                             color: appointment.color,
                           ),
                           padding:
-                              const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                              const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +285,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               Expanded(
                                 child: Text(
                                   appointmentSubject,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white,fontSize: 12),
                                 ),
                               ),
                               current == CalendarView.day ||
