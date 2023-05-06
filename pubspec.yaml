@@ -54,10 +54,9 @@ dependencies:
   crypto:
   get: ^4.3.8
   syncfusion_flutter_calendar: ^21.1.41
-  flutter_to_pdf: ^0.1.0
   path_provider: ^2.0.8
   screenshot:
-  pdf:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

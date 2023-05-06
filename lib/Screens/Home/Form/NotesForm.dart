@@ -22,7 +22,6 @@ class NotesForm extends StatefulWidget {
 class _NotesFormState extends State<NotesForm> {
   final formKey = GlobalKey<FormState>();
   Map<String, dynamic>? notesMap;
-  Map<String, dynamic>? userNotesMap;
 
   TextEditingController notesTitle = TextEditingController();
   TextEditingController notesIdText = TextEditingController();
@@ -205,8 +204,13 @@ class _NotesFormState extends State<NotesForm> {
                         onTap: ()  async {
                           int errorMessage =  await submitForm();
                           if (errorMessage!=0) {
-                            Navigator.pop(context);
-                            Get.off(MyApp());
+                            //Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                                  (Route<dynamic> route) => false,
+                            );
+
                           } else {
                             // if there's an error, display an error message
                             ScaffoldMessenger.of(context).showSnackBar(

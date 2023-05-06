@@ -1,6 +1,5 @@
 import 'dart:html' as html;
 import 'dart:typed_data';
-import 'package:flutter_to_pdf/flutter_to_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -80,7 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   String headerText = DateFormat('MMM, yyyy').format(DateTime.now());
 
-  final ExportDelegate exportDelegate = ExportDelegate();
+
 
 
   @override

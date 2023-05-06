@@ -24,4 +24,17 @@ class NotesApi{
 
 
   }
+
+  static Future<Response> deleteNotes(int notesId) async {
+    String userApiUrl = "$baseUrl/api/Notes/$notesId";
+    try {
+      http.Client client = http.Client();
+      final response = await client.delete(Uri.parse(userApiUrl));
+      return response;
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+
+
+  }
 }
