@@ -187,577 +187,9 @@ class _HomePageState extends State<HomePage> {
                               margin: const EdgeInsets.symmetric(horizontal: 8),
                               child: Column(
                                 children: [
-                                  Visibility(
-                                    visible: widget.userModel.userEvents.any(
-                                        (events) =>
-                                            (events
-                                                    .description
-                                                    .toLowerCase()
-                                                    .contains(
-                                                        search
-                                                            .text
-                                                            .toLowerCase()) ||
-                                                events
-                                                    .eventTitle
-                                                    .toLowerCase()
-                                                    .contains(search.text
-                                                        .toLowerCase())) &&
-                                            (DateTime.parse(
-                                                    "${events.startDate} ${events.startTime.substring(0, 5)}")
-                                                .isAfter(DateTime.now()))),
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) =>
-                                          SizedBox(
-                                        height: 200,
-                                        child: ListView.builder(
-                                          itemBuilder: (context, index) {
-                                            bool eventsContains = (widget
-                                                        .userModel
-                                                        .userEvents[index]
-                                                        .eventTitle
-                                                        .toLowerCase()
-                                                        .contains(search.text
-                                                            .toLowerCase()) ||
-                                                    widget
-                                                        .userModel
-                                                        .userEvents[index]
-                                                        .description
-                                                        .toLowerCase()
-                                                        .contains(search.text
-                                                            .toLowerCase())) &&
-                                                (DateTime.parse(widget
-                                                        .userModel
-                                                        .userEvents[index]
-                                                        .startDate)
-                                                    .isAfter(DateTime.now()));
-                                            return eventsContains
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      //print("Hmm");
-                                                    },
-                                                    onHover: (value) {
-                                                      setState(() {
-                                                        eventsHoverList[index] =
-                                                            value;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 150,
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.blue,
-                                                        border: Border.all(
-                                                            color: Colors
-                                                                .grey.shade200,
-                                                            width: 1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Expanded(
-                                                              child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                    widget
-                                                                        .userModel
-                                                                        .userEvents[
-                                                                            index]
-                                                                        .eventTitle,
-                                                                    style: GoogleFonts.poppins(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color: Colors
-                                                                            .white)),
-                                                              ),
-                                                              Expanded(
-                                                                  child:
-                                                                      AnimatedOpacity(
-                                                                opacity:
-                                                                    eventsHoverList[
-                                                                            index]
-                                                                        ? 1.0
-                                                                        : 0.0,
-                                                                duration:
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            100),
-                                                                child:
-                                                                    PopupMenuButton<
-                                                                        String>(
-                                                                  itemBuilder:
-                                                                      (context) =>
-                                                                          [
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'edit',
-                                                                      child:
-                                                                          Text(
-                                                                        'Edit',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'delete',
-                                                                      child:
-                                                                          Text(
-                                                                        'Delete',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                  onSelected:
-                                                                      (value) {
-                                                                    // handle menu item selection here
-                                                                    print(
-                                                                        'Selected: $value');
-                                                                  },
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .more_vert,
-                                                                    color: Colors.white,
-                                                                    size: 16,
-                                                                  ),
-                                                                ),
-                                                              ))
-                                                            ],
-                                                          )),
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Text(
-                                                                widget
-                                                                    .userModel
-                                                                    .userEvents[
-                                                                        index]
-                                                                    .description,
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                                "${widget.userModel.userEvents[index].startDate} ${widget.userModel.userEvents[index].startTime}",
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                                "${widget.userModel.userEvents[index].endDate} ${widget.userModel.userEvents[index].endTime}",
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(
-                                                    height: 0,
-                                                  );
-                                          },
-                                          itemCount: widget
-                                              .userModel.userEvents.length,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: widget.userModel.userTasks.any(
-                                        (task) =>
-                                            (task.description
-                                                    .toLowerCase()
-                                                    .contains(search.text
-                                                        .toLowerCase()) ||
-                                                task.taskTitle
-                                                    .toLowerCase()
-                                                    .contains(search.text
-                                                        .toLowerCase())) &&
-                                            (DateTime.parse(
-                                                    "${task.taskDate} ${task.taskTime.substring(0, 5)}")
-                                                .isAfter(DateTime.now()))),
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) =>
-                                          SizedBox(
-                                        height: 200,
-                                        child: ListView.builder(
-                                          itemBuilder: (context, index) {
-                                            bool taskContains = (widget
-                                                        .userModel
-                                                        .userTasks[index]
-                                                        .taskTitle
-                                                        .toLowerCase()
-                                                        .contains(search.text
-                                                            .toLowerCase()) ||
-                                                    widget
-                                                        .userModel
-                                                        .userTasks[index]
-                                                        .description
-                                                        .toLowerCase()
-                                                        .contains(search.text
-                                                            .toLowerCase())) &&
-                                                (DateTime.parse(
-                                                        "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime.substring(0, 5)}")
-                                                    .isAfter(DateTime.now()));
-                                            return taskContains
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      //print("Hmm");
-                                                    },
-                                                    onHover: (value) {
-                                                      setState(() {
-                                                        taskHoverList[index] =
-                                                            value;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 100,
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.orange,
-                                                        border: Border.all(
-                                                            color: Colors
-                                                                .grey.shade200,
-                                                            width: 1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Expanded(
-                                                              child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                    widget
-                                                                        .userModel
-                                                                        .userTasks[
-                                                                            index]
-                                                                        .taskTitle,
-                                                                    style: GoogleFonts.poppins(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color: Colors
-                                                                            .white)),
-                                                              ),
-                                                              Expanded(
-                                                                  child:
-                                                                      AnimatedOpacity(
-                                                                opacity:
-                                                                    taskHoverList[
-                                                                            index]
-                                                                        ? 1.0
-                                                                        : 0.0,
-                                                                duration:
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            100),
-                                                                child:
-                                                                    PopupMenuButton<
-                                                                        String>(
-                                                                  itemBuilder:
-                                                                      (context) =>
-                                                                          [
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'edit',
-                                                                      child:
-                                                                          Text(
-                                                                        'Edit',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'delete',
-                                                                      child:
-                                                                          Text(
-                                                                        'Delete',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                  onSelected:
-                                                                      (value) {
-                                                                    // handle menu item selection here
-                                                                    print(
-                                                                        'Selected: $value');
-                                                                  },
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .more_vert,
-                                                                    color: Colors.white,
-                                                                    size: 16,
-                                                                  ),
-                                                                ),
-                                                              ))
-                                                            ],
-                                                          )),
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Text(
-                                                                widget
-                                                                    .userModel
-                                                                    .userTasks[
-                                                                        index]
-                                                                    .description,
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                                "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime}",
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(
-                                                    height: 0,
-                                                  );
-                                          },
-                                          itemCount:
-                                              widget.userModel.userTasks.length,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: widget.userModel.userReminder.any(
-                                        (reminder) =>
-                                            (reminder.description
-                                                .toLowerCase()
-                                                .contains(search.text
-                                                    .toLowerCase())) &&
-                                            (DateTime.parse(
-                                                    "${reminder.remainderDate} ${reminder.remainderTime.substring(0, 5)}")
-                                                .isAfter(DateTime.now()))),
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) =>
-                                          SizedBox(
-                                        height: 200,
-                                        child: ListView.builder(
-                                          itemBuilder: (context, index) {
-                                            bool reminderContains = (widget
-                                                    .userModel
-                                                    .userReminder[index]
-                                                    .description
-                                                    .toLowerCase()
-                                                    .contains(search.text
-                                                        .toLowerCase())) &&
-                                                (DateTime.parse(
-                                                        "${widget.userModel.userReminder[index].remainderDate} ${widget.userModel.userReminder[index].remainderTime.substring(0, 5)}")
-                                                    .isAfter(DateTime.now()));
-                                            return reminderContains
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      //print("Hmm");
-                                                    },
-                                                    onHover: (value) {
-                                                      setState(() {
-                                                        reminderHoverList[
-                                                            index] = value;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 100,
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.red,
-                                                        border: Border.all(
-                                                            color: Colors
-                                                                .grey.shade200,
-                                                            width: 1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Expanded(
-                                                              child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                    "Reminder",
-                                                                    style: GoogleFonts.poppins(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color: Colors
-                                                                            .white)),
-                                                              ),
-                                                              Expanded(
-                                                                  child:
-                                                                      AnimatedOpacity(
-                                                                opacity:
-                                                                    reminderHoverList[
-                                                                            index]
-                                                                        ? 1.0
-                                                                        : 0.0,
-                                                                duration:
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            100),
-                                                                child:
-                                                                    PopupMenuButton<
-                                                                        String>(
-                                                                  itemBuilder:
-                                                                      (context) =>
-                                                                          [
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'edit',
-                                                                      child:
-                                                                          Text(
-                                                                        'Edit',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                    PopupMenuItem(
-                                                                      value:
-                                                                          'delete',
-                                                                      child:
-                                                                          Text(
-                                                                        'Delete',
-                                                                        style: GoogleFonts.poppins(
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                  onSelected:
-                                                                      (value) {
-                                                                    // handle menu item selection here
-                                                                    print(
-                                                                        'Selected: $value');
-                                                                  },
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .more_vert,
-                                                                    color: Colors.white,
-                                                                    size: 16,
-                                                                  ),
-                                                                ),
-                                                              ))
-                                                            ],
-                                                          )),
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Text(
-                                                                widget
-                                                                    .userModel
-                                                                    .userReminder[
-                                                                        index]
-                                                                    .description,
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                                "${widget.userModel.userReminder[index].remainderDate} ${widget.userModel.userReminder[index].remainderTime}",
-                                                                style: GoogleFonts.poppins(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(
-                                                    height: 0,
-                                                  );
-                                          },
-                                          itemCount: widget
-                                              .userModel.userReminder.length,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  eventSearchContainer(),
+                                  taskSearchContainer(),
+                                  reminderSearchContainer(),
                                 ],
                               ),
                             ),
@@ -871,6 +303,16 @@ class _HomePageState extends State<HomePage> {
                                                                           12),
                                                             ),
                                                           ),
+                                                          PopupMenuItem(
+                                                            value: 'share',
+                                                            child: Text(
+                                                              'Share',
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                      fontSize:
+                                                                          12),
+                                                            ),
+                                                          ),
                                                         ],
                                                         onSelected: (value) {
                                                           // handle menu item selection here
@@ -937,42 +379,10 @@ class _HomePageState extends State<HomePage> {
                                 return Events(userId: widget.userModel.userId);
                               });
                         },
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    "https://cdn0.iconfinder.com/data/icons/time-calendar-2/24/time_event_calendar_add_create-512.png",
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 24,
-                              child: AnimatedOpacity(
-                                opacity: _eventHovering ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 100),
-                                child: Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Text(
-                                    'Event',
-                                    style: GoogleFonts.poppins(
-                                      color: const Color(0xff00ADB5),
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: optionsWidget(
+                            "https://cdn0.iconfinder.com/data/icons/time-calendar-2/24/time_event_calendar_add_create-512.png",
+                            _eventHovering,
+                            "Event"),
                         onHover: (val) {
                           setState(() {
                             _eventHovering = val;
@@ -990,41 +400,10 @@ class _HomePageState extends State<HomePage> {
                                     userId: widget.userModel.userId);
                               });
                         },
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://cdn-icons-png.flaticon.com/512/6109/6109208.png"),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 24,
-                              child: AnimatedOpacity(
-                                opacity: _taskHovering ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 100),
-                                child: Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Text(
-                                    'Task',
-                                    style: GoogleFonts.poppins(
-                                      color: const Color(0xff00ADB5),
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: optionsWidget(
+                            "https://cdn-icons-png.flaticon.com/512/6109/6109208.png",
+                            _taskHovering,
+                            "Task"),
                         onHover: (val) {
                           setState(() {
                             _taskHovering = val;
@@ -1042,41 +421,10 @@ class _HomePageState extends State<HomePage> {
                                     userId: widget.userModel.userId);
                               });
                         },
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 36,
-                              width: 36,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://cdn0.iconfinder.com/data/icons/online-education-butterscotch-vol-2/512/Student_Notes-512.png"),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 24,
-                              child: AnimatedOpacity(
-                                opacity: _notesHovering ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 100),
-                                child: Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Text(
-                                    'Notes',
-                                    style: GoogleFonts.poppins(
-                                      color: const Color(0xff00ADB5),
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: optionsWidget(
+                            "https://cdn0.iconfinder.com/data/icons/online-education-butterscotch-vol-2/512/Student_Notes-512.png",
+                            _notesHovering,
+                            "Notes"),
                         onHover: (val) {
                           setState(() {
                             _notesHovering = val;
@@ -1094,41 +442,10 @@ class _HomePageState extends State<HomePage> {
                                     userId: widget.userModel.userId);
                               });
                         },
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://cdn-icons-png.flaticon.com/512/1792/1792931.png"),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 24,
-                              child: AnimatedOpacity(
-                                opacity: _reminderHovering ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 100),
-                                child: Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Text(
-                                    'Reminder',
-                                    style: GoogleFonts.poppins(
-                                      color: const Color(0xff00ADB5),
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: optionsWidget(
+                            "https://cdn-icons-png.flaticon.com/512/1792/1792931.png",
+                            _reminderHovering,
+                            "Reminder"),
                         onHover: (val) {
                           setState(() {
                             _reminderHovering = val;
@@ -1157,5 +474,451 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     ));
+  }
+
+  Stack optionsWidget(String image, bool hoveringBool, String optionName) {
+    return Stack(
+      children: [
+        Container(
+          height: 30,
+          width: 30,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                image,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 24,
+          child: AnimatedOpacity(
+            opacity: hoveringBool ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 100),
+            child: Container(
+              width: 100,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Text(
+                optionName,
+                style: GoogleFonts.poppins(
+                  color: const Color(0xff00ADB5),
+                  fontSize: 10.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Visibility reminderSearchContainer() {
+    return Visibility(
+      visible: widget.userModel.userReminder.any((reminder) =>
+          (reminder.description
+              .toLowerCase()
+              .contains(search.text.toLowerCase())) &&
+          (DateTime.parse(
+                  "${reminder.remainderDate} ${reminder.remainderTime.substring(0, 5)}")
+              .isAfter(DateTime.now()))),
+      child: LayoutBuilder(
+        builder: (context, constraints) => SizedBox(
+          height: 200,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              bool reminderContains = (widget
+                      .userModel.userReminder[index].description
+                      .toLowerCase()
+                      .contains(search.text.toLowerCase())) &&
+                  (DateTime.parse(
+                          "${widget.userModel.userReminder[index].remainderDate} ${widget.userModel.userReminder[index].remainderTime.substring(0, 5)}")
+                      .isAfter(DateTime.now()));
+              return reminderContains
+                  ? InkWell(
+                      onTap: () {
+                        //print("Hmm");
+                      },
+                      onHover: (value) {
+                        setState(() {
+                          reminderHoverList[index] = value;
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          border:
+                              Border.all(color: Colors.grey.shade200, width: 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text("Reminder",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white)),
+                                ),
+                                Expanded(
+                                    child: AnimatedOpacity(
+                                  opacity: reminderHoverList[index] ? 1.0 : 0.0,
+                                  duration: const Duration(milliseconds: 100),
+                                  child: PopupMenuButton<String>(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'edit',
+                                        child: Text(
+                                          'Edit',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'cancel',
+                                        child: Text(
+                                          'Cancel',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'share',
+                                        child: Text(
+                                          'Share',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      // handle menu item selection here
+                                      print('Selected: $value');
+                                    },
+                                    child: const Icon(
+                                      Icons.more_vert,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ))
+                              ],
+                            )),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                  widget.userModel.userReminder[index]
+                                      .description,
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "${widget.userModel.userReminder[index].remainderDate} ${widget.userModel.userReminder[index].remainderTime}",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      height: 0,
+                    );
+            },
+            itemCount: widget.userModel.userReminder.length,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Visibility taskSearchContainer() {
+    return Visibility(
+      visible: widget.userModel.userTasks.any((task) =>
+          (task.description.toLowerCase().contains(search.text.toLowerCase()) ||
+              task.taskTitle
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase())) &&
+          (DateTime.parse("${task.taskDate} ${task.taskTime.substring(0, 5)}")
+              .isAfter(DateTime.now()))),
+      child: LayoutBuilder(
+        builder: (context, constraints) => SizedBox(
+          height: 200,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              bool taskContains = (widget.userModel.userTasks[index].taskTitle
+                          .toLowerCase()
+                          .contains(search.text.toLowerCase()) ||
+                      widget.userModel.userTasks[index].description
+                          .toLowerCase()
+                          .contains(search.text.toLowerCase())) &&
+                  (DateTime.parse(
+                          "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime.substring(0, 5)}")
+                      .isAfter(DateTime.now()));
+              return taskContains
+                  ? InkWell(
+                      onTap: () {
+                        //print("Hmm");
+                      },
+                      onHover: (value) {
+                        setState(() {
+                          taskHoverList[index] = value;
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          border:
+                              Border.all(color: Colors.grey.shade200, width: 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                      widget
+                                          .userModel.userTasks[index].taskTitle,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white)),
+                                ),
+                                Expanded(
+                                    child: AnimatedOpacity(
+                                  opacity: taskHoverList[index] ? 1.0 : 0.0,
+                                  duration: const Duration(milliseconds: 100),
+                                  child: PopupMenuButton<String>(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'edit',
+                                        child: Text(
+                                          'Edit',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'cancel',
+                                        child: Text(
+                                          'Cancel',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'share',
+                                        child: Text(
+                                          'Share',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      // handle menu item selection here
+                                      print('Selected: $value');
+                                    },
+                                    child: const Icon(
+                                      Icons.more_vert,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ))
+                              ],
+                            )),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                  widget.userModel.userTasks[index].description,
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "${widget.userModel.userTasks[index].taskDate} ${widget.userModel.userTasks[index].taskTime}",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      height: 0,
+                    );
+            },
+            itemCount: widget.userModel.userTasks.length,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Visibility eventSearchContainer() {
+    return Visibility(
+      visible: widget.userModel.userEvents.any((events) =>
+          (events.description
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase()) ||
+              events.eventTitle
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase())) &&
+          (DateTime.parse(
+                  "${events.startDate} ${events.startTime.substring(0, 5)}")
+              .isAfter(DateTime.now()))),
+      child: LayoutBuilder(
+        builder: (context, constraints) => SizedBox(
+          height: 200,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              bool eventsContains = (widget
+                          .userModel.userEvents[index].eventTitle
+                          .toLowerCase()
+                          .contains(search.text.toLowerCase()) ||
+                      widget.userModel.userEvents[index].description
+                          .toLowerCase()
+                          .contains(search.text.toLowerCase())) &&
+                  (DateTime.parse(widget.userModel.userEvents[index].startDate)
+                      .isAfter(DateTime.now()));
+              return eventsContains
+                  ? InkWell(
+                      onTap: () {
+                        //print("Hmm");
+                      },
+                      onHover: (value) {
+                        setState(() {
+                          eventsHoverList[index] = value;
+                        });
+                      },
+                      child: Container(
+                        height: 150,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          border:
+                              Border.all(color: Colors.grey.shade200, width: 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                      widget.userModel.userEvents[index]
+                                          .eventTitle,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white)),
+                                ),
+                                Expanded(
+                                    child: AnimatedOpacity(
+                                  opacity: eventsHoverList[index] ? 1.0 : 0.0,
+                                  duration: const Duration(milliseconds: 100),
+                                  child: PopupMenuButton<String>(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'edit',
+                                        child: Text(
+                                          'Edit',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'cancel',
+                                        child: Text(
+                                          'Cancel',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'share',
+                                        child: Text(
+                                          'Share',
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      // handle menu item selection here
+                                      print('Selected: $value');
+                                    },
+                                    child: const Icon(
+                                      Icons.more_vert,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ))
+                              ],
+                            )),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                  widget
+                                      .userModel.userEvents[index].description,
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "${widget.userModel.userEvents[index].startDate} ${widget.userModel.userEvents[index].startTime}",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "${widget.userModel.userEvents[index].endDate} ${widget.userModel.userEvents[index].endTime}",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      height: 0,
+                    );
+            },
+            itemCount: widget.userModel.userEvents.length,
+          ),
+        ),
+      ),
+    );
   }
 }

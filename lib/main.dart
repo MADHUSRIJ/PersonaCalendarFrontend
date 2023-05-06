@@ -42,9 +42,28 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
+
+  String? displayName;
+
+  Future auth() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    displayName = prefs.getString('displayName');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    auth();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+    if (displayName != null) {
+      return UserModelRouting(userId: displayName!);
+    }
+
     return MediaQuery(
       data: const MediaQueryData(),
       child: GetMaterialApp(
@@ -64,6 +83,7 @@ class _RoutingState extends State<Routing> {
     );
   }
 }
+
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
@@ -91,6 +111,7 @@ class MyApp extends StatelessWidget {
                   height: 48, width: 48, child: CircularProgressIndicator()));
         } else if (snapshot.hasData) {
           if (displayName == null) {
+            // Save the user's display name in SharedPreferences
             prefs.setString('displayName', snapshot.data!.displayName!);
           }
 
@@ -101,6 +122,7 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
