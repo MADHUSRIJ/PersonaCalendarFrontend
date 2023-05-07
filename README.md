@@ -1,6 +1,10 @@
 # Persona Calendar
 
 The Persona Calendar is a clone try of Google Calendar
+FrontEnd - Flutter
+Auth - Firebase
+Backend - Asp .net
+Database - SQL
 
 # Features
 
