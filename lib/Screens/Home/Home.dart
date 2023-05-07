@@ -3,14 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persona_calendar/Animation/animation.dart';
+import 'package:persona_calendar/Models/EventsModel.dart';
 import 'package:persona_calendar/Models/NotesModel.dart';
+import 'package:persona_calendar/Models/ReminderModel.dart';
+import 'package:persona_calendar/Models/TasksModel.dart';
 import 'package:persona_calendar/Models/UsersModel.dart';
 import 'package:persona_calendar/Screens/Home/Calendar.dart';
 import 'package:persona_calendar/Screens/Home/Form/EventForm.dart';
 import 'package:persona_calendar/Screens/Home/Form/NotesForm.dart';
 import 'package:persona_calendar/Screens/Home/Form/ReminderForm.dart';
 import 'package:persona_calendar/Screens/Home/Form/TaskForm.dart';
+import 'package:persona_calendar/Services/Apis/EventsApi.dart';
 import 'package:persona_calendar/Services/Apis/NotesApi.dart';
+import 'package:persona_calendar/Services/Apis/ReminderApi.dart';
+import 'package:persona_calendar/Services/Apis/TasksApi.dart';
 import 'package:persona_calendar/Services/app_routes.dart';
 import 'package:persona_calendar/main.dart';
 import 'package:persona_calendar/sizeConfig.dart';
@@ -326,6 +333,32 @@ class _HomePageState extends State<HomePage> {
                                                         ],
                                                         onSelected:
                                                             (value) async {
+                                                          if (value == 'edit') {
+                                                            setState(() {
+                                                              notesTitle.text =
+                                                                  widget
+                                                                      .userModel
+                                                                      .userNotes[
+                                                                          index]
+                                                                      .notesTitle!;
+                                                              notesDescription
+                                                                      .text =
+                                                                  widget
+                                                                      .userModel
+                                                                      .userNotes[
+                                                                          index]
+                                                                      .description!;
+                                                            });
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return notesEdit(widget
+                                                                      .userModel
+                                                                      .userNotes[index]);
+                                                                });
+                                                          }
                                                           if (value ==
                                                               'delete') {
                                                             showDialog(
@@ -513,7 +546,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                             onTap: () {
                               FirebaseAuth.instance.signOut();
-                              Get.toNamed(AppRoutes.MyApp);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyApp()),
+                                    (Route<dynamic> route) => false,
+                              );
                             },
                           ),
                         )),
@@ -585,25 +622,23 @@ class _HomePageState extends State<HomePage> {
                   onTap: () async {
                     final response = await NotesApi.deleteNotes(notes.notesId!);
                     if (response.statusCode == 204) {
-                       ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Delete Successful'),
                           duration: Duration(seconds: 10),
                         ),
                       );
-                       Navigator.pop(context);
-                       Navigator.pushAndRemoveUntil(
-                         context,
-                         MaterialPageRoute(builder: (context) => MyApp()),
-                             (Route<dynamic> route) => false,
-                       );
-
-                    }
-
-                    else{
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Delete not performed ${response.statusCode}'),
+                          content: Text(
+                              'Delete not performed ${response.statusCode}'),
                           duration: const Duration(seconds: 10),
                         ),
                       );
@@ -630,7 +665,243 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   AlertDialog notesEdit(NotesModel notes) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      content: Container(
+        alignment: Alignment.center,
+        height: SizeConfig.height! * 60,
+        width: SizeConfig.width! * 50,
+        margin: const EdgeInsets.symmetric(vertical: 30),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+                child: FadeAnimation(
+                    1.1,
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 20),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Persona',
+                              style: TextStyle(color: Color(0xff00ADB5))),
+                          TextSpan(text: ' Calendar'),
+                        ],
+                      ),
+                    ))),
+            Expanded(
+                child: FadeAnimation(
+                    1.2,
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                        children: <TextSpan>[TextSpan(text: 'Edit Notes')],
+                      ),
+                    ))),
+            Expanded(
+              flex: 6,
+              child: Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: SizeConfig.height! * 2,
+                    ),
+                    Expanded(
+                        child: FadeAnimation(
+                            1.3,
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 0.5,
+                                        color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextFormField(
+                                  controller: notesTitle,
+                                  validator: (value) {
+                                    if (value!.isEmpty && value == "") {
+                                      return "Notes Title should not be left empty";
+                                    }
+                                    return null;
+                                  },
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                      hintText: "Notes Title",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(
+                                        Icons.notes,
+                                        size: SizeConfig.height! * 3,
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ))),
+                    SizedBox(
+                      height: SizeConfig.height! * 2,
+                    ),
+                    Expanded(
+                        child: FadeAnimation(
+                            1.4,
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: SizeConfig.width! * 4),
+                              height: SizeConfig.height! * 4,
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 0.5,
+                                        color: Colors.grey.shade500),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextFormField(
+                                  controller: notesDescription,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                      hintText: "Notes Description",
+                                      errorMaxLines: 1,
+                                      prefixIcon: Icon(
+                                        Icons.description,
+                                        size: SizeConfig.height! * 3,
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 20),
+                                      hintStyle: GoogleFonts.poppins(
+                                          fontSize: SizeConfig.height! * 2.3,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey),
+                                      border: InputBorder.none),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: SizeConfig.height! * 2,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ))),
+                    SizedBox(
+                      height: SizeConfig.height! * 2,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+                child: FadeAnimation(
+                    1.5,
+                    Row(
+                      children: [
+                        const Expanded(child: SizedBox()),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(3)),
+                              child: Text(
+                                "Cancel",
+                                style: GoogleFonts.poppins(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: GestureDetector(
+                          onTap: () async {
+                            Map<String, dynamic> map = {
+                              "notesId": notes.notesId!,
+                              "notesTitle": notesTitle.text,
+                              "notesBody": notesDescription.text,
+                              "userId": widget.userModel.userId,
+                              "access": "Owner",
+                              "users": null
+                            };
+                            final response =
+                                await NotesApi.editNotes(notes.notesId!, map);
+                            if (response.statusCode == 204) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Edit Successful'),
+                                  duration: Duration(seconds: 10),
+                                ),
+                              );
+                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyApp()),
+                                (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Edit not performed ${response.statusCode}'),
+                                  duration: const Duration(seconds: 10),
+                                ),
+                              );
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(3)),
+                            child: Text(
+                              "Edit",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        )),
+                      ],
+                    )))
+          ],
+        ),
+      ),
+    );
+  }
+
+  AlertDialog eventDelete(EventsModel events) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -649,159 +920,295 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                children: [
-                  SizedBox(height: SizeConfig.height! * 2,),
-                  Expanded(
-                      child: Container(
-                        padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                        height: SizeConfig.height! * 4,
-                        alignment: Alignment.center,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: TextFormField(
-                            controller: notesTitle,
-                            validator: (value) {
-                              if (value!.isEmpty && value == "") {
-                                return "Notes Title should not be left empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            decoration:
-                            InputDecoration(
-                                hintText: "Notes Title",
-                                errorMaxLines: 1,
-                                prefixIcon: Icon(Icons.notes,size: SizeConfig.height! * 3,),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 20),
-                                hintStyle: GoogleFonts.poppins(
-                                    fontSize: SizeConfig.height! * 2.3,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey),
-                                border: InputBorder.none
-                            ),
-                            style: GoogleFonts.poppins(
-                                fontSize: SizeConfig.height! * 2,
-                                color: Colors.black),
-                          ),
-                        ),
-                      )
-                  ),
-                  SizedBox(height: SizeConfig.height! * 2,),
-                  Expanded(
-                      child: Container(
-                        padding:EdgeInsets.symmetric(horizontal: SizeConfig.width! * 4),
-                        height: SizeConfig.height! * 4,
-                        alignment: Alignment.center,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 0.5,color: Colors.grey.shade500),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: TextFormField(
-                            controller: notesDescription,
-
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            decoration:
-                            InputDecoration(
-                                hintText: "Notes Description",
-                                errorMaxLines: 1,
-                                prefixIcon: Icon(Icons.description,size: SizeConfig.height! * 3,),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 20),
-                                hintStyle: GoogleFonts.poppins(
-                                    fontSize: SizeConfig.height! * 2.3,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey),
-                                border: InputBorder.none
-                            ),
-                            style: GoogleFonts.poppins(
-                                fontSize: SizeConfig.height! * 2,
-                                color: Colors.black),
-                          ),
-                        ),
-                      )
-                  ),
-                  SizedBox(height: SizeConfig.height! * 2,),
-                ],
+            Expanded(
+              child: Text(
+                "Are you sure want to delete event?",
+                style: GoogleFonts.poppins(),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                events.eventTitle!,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
               ),
             ),
             Expanded(
                 child: Row(
-                  children: [
-                    const Expanded(child: SizedBox()),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(3)),
-                          child: Text(
-                            "Cancel",
-                            style: GoogleFonts.poppins(
-                                color: Colors.grey, fontWeight: FontWeight.w400),
-                          ),
-                        ),
+              children: [
+                const Expanded(child: SizedBox()),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(3)),
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.poppins(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
                       ),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            final response = await NotesApi.deleteNotes(notes.notesId!);
-                            if (response.statusCode == 204) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Delete Successful'),
-                                  duration: Duration(seconds: 10),
-                                ),
-                              );
-                              Navigator.pop(context);
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => MyApp()),
-                                    (Route<dynamic> route) => false,
-                              );
+                  ),
+                ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () async {
+                    final response =
+                        await EventsApi.deleteEvents(events.eventId!);
+                    if (response.statusCode == 204) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Delete Successful'),
+                          duration: Duration(seconds: 10),
+                        ),
+                      );
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Delete not performed ${response.statusCode}'),
+                          duration: const Duration(seconds: 10),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(3)),
+                    child: Text(
+                      "Delete",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                )),
+              ],
+            ))
+          ],
+        ),
+      ),
+    );
+  }
 
-                            }
+  AlertDialog taskDelete(TaskModel task) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      content: Container(
+        alignment: Alignment.center,
+        height: SizeConfig.height! * 30,
+        width: SizeConfig.width! * 30,
+        margin: const EdgeInsets.symmetric(vertical: 30),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                "Are you sure want to delete note?",
+                style: GoogleFonts.poppins(),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                task.taskTitle!,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              ),
+            ),
+            Expanded(
+                child: Row(
+              children: [
+                const Expanded(child: SizedBox()),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(3)),
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.poppins(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () async {
+                    final response = await TasksApi.deleteTask(task.taskId!);
+                    if (response.statusCode == 204) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Delete Successful'),
+                          duration: Duration(seconds: 10),
+                        ),
+                      );
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Delete not performed ${response.statusCode}'),
+                          duration: const Duration(seconds: 10),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(3)),
+                    child: Text(
+                      "Delete",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                )),
+              ],
+            ))
+          ],
+        ),
+      ),
+    );
+  }
 
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Delete not performed ${response.statusCode}'),
-                                  duration: const Duration(seconds: 10),
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(8),
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(3)),
-                            child: Text(
-                              "Delete",
-                              style: GoogleFonts.poppins(
-                                  color: Colors.white, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        )),
-                  ],
-                ))
+  AlertDialog reminderDelete(RemainderModel reminder) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      content: Container(
+        alignment: Alignment.center,
+        height: SizeConfig.height! * 30,
+        width: SizeConfig.width! * 30,
+        margin: const EdgeInsets.symmetric(vertical: 30),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                "Are you sure want to delete note?",
+                style: GoogleFonts.poppins(),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                reminder.description,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              ),
+            ),
+            Expanded(
+                child: Row(
+              children: [
+                const Expanded(child: SizedBox()),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(3)),
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.poppins(
+                            color: Colors.grey, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () async {
+                    final response =
+                        await ReminderApi.deleteReminder(reminder.remainderId!);
+                    if (response.statusCode == 204) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Delete Successful'),
+                          duration: Duration(seconds: 10),
+                        ),
+                      );
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Delete not performed ${response.statusCode}'),
+                          duration: const Duration(seconds: 10),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(3)),
+                    child: Text(
+                      "Delete",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                )),
+              ],
+            ))
           ],
         ),
       ),
@@ -934,9 +1341,46 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     ],
-                                    onSelected: (value) {
-                                      // handle menu item selection here
-                                      print('Selected: $value');
+                                    onSelected: (value) async{
+                                      if(value == "edit"){
+                                        showDialog(context: context, builder: (context){
+                                          return Container();
+                                        });
+                                      }
+                                      if(value == "cancel"){
+                                        showDialog(context: context, builder: (context){
+                                          return reminderDelete(widget.userModel.userReminder[index]);
+                                        });
+                                      }
+                                      if (value ==
+                                          'share') {
+                                        try {
+                                          final Uri params =
+                                          Uri(
+                                            scheme:
+                                            'mailto',
+                                            path:
+                                            'nithinraajjp@gmail.com',
+                                            query:
+                                            'subject=subject of email&body=body of email',
+                                          );
+
+                                          final String url =
+                                          params
+                                              .toString();
+                                          print(url);
+                                          if (await canLaunchUrl(
+                                              params)) {
+                                            await launchUrl(
+                                                params);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        } catch (ex) {
+                                          print(ex
+                                              .toString());
+                                        }
+                                      }
                                     },
                                     child: const Icon(
                                       Icons.more_vert,
@@ -1068,10 +1512,49 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     ],
-                                    onSelected: (value) {
-                                      // handle menu item selection here
-                                      print('Selected: $value');
-                                    },
+
+                                      onSelected: (value) async{
+                                        if(value == "edit"){
+                                          showDialog(context: context, builder: (context){
+                                            return Container();
+                                          });
+                                        }
+                                        if(value == "cancel"){
+                                          showDialog(context: context, builder: (context){
+                                            return taskDelete(widget.userModel.userTasks[index]);
+                                          });
+                                        }
+                                        if (value ==
+                                            'share') {
+                                          try {
+                                            final Uri params =
+                                            Uri(
+                                              scheme:
+                                              'mailto',
+                                              path:
+                                              'nithinraajjp@gmail.com',
+                                              query:
+                                              'subject=subject of email&body=body of email',
+                                            );
+
+                                            final String url =
+                                            params
+                                                .toString();
+                                            print(url);
+                                            if (await canLaunchUrl(
+                                                params)) {
+                                              await launchUrl(
+                                                  params);
+                                            } else {
+                                              throw 'Could not launch $url';
+                                            }
+                                          } catch (ex) {
+                                            print(ex
+                                                .toString());
+                                          }
+                                        }
+                                      },
+
                                     child: const Icon(
                                       Icons.more_vert,
                                       color: Colors.white,
@@ -1204,9 +1687,46 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     ],
-                                    onSelected: (value) {
-                                      // handle menu item selection here
-                                      print('Selected: $value');
+                                    onSelected: (value) async{
+                                      if(value == "edit"){
+                                        showDialog(context: context, builder: (context){
+                                          return Container();
+                                        });
+                                      }
+                                      if(value == "cancel"){
+                                        showDialog(context: context, builder: (context){
+                                          return eventDelete(widget.userModel.userEvents[index]);
+                                        });
+                                      }
+                                      if (value ==
+                                          'share') {
+                                        try {
+                                          final Uri params =
+                                          Uri(
+                                            scheme:
+                                            'mailto',
+                                            path:
+                                            'nithinraajjp@gmail.com',
+                                            query:
+                                            'subject=subject of email&body=body of email',
+                                          );
+
+                                          final String url =
+                                          params
+                                              .toString();
+                                          print(url);
+                                          if (await canLaunchUrl(
+                                          params)) {
+                                      await launchUrl(
+                                      params);
+                                      } else {
+                                      throw 'Could not launch $url';
+                                      }
+                                      } catch (ex) {
+                                      print(ex
+                                          .toString());
+                                      }
+                                    }
                                     },
                                     child: const Icon(
                                       Icons.more_vert,

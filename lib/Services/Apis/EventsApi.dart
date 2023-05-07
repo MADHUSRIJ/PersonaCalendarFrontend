@@ -24,4 +24,15 @@ class EventsApi{
 
 
   }
+
+  static Future<Response> deleteEvents(int eventId) async {
+    String userApiUrl = "$baseUrl/api/Events/$eventId";
+    try {
+      http.Client client = http.Client();
+      final response = await client.delete(Uri.parse(userApiUrl));
+      return response;
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+  }
 }

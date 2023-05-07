@@ -24,4 +24,15 @@ class ReminderApi{
 
 
   }
+
+  static Future<Response> deleteReminder(int reminderId) async {
+    String userApiUrl = "$baseUrl/api/Reminders/$reminderId";
+    try {
+      http.Client client = http.Client();
+      final response = await client.delete(Uri.parse(userApiUrl));
+      return response;
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+  }
 }

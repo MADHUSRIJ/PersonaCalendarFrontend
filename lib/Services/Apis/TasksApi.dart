@@ -24,4 +24,15 @@ class TasksApi{
 
 
   }
+
+  static Future<Response> deleteTask(int taskId) async {
+    String userApiUrl = "$baseUrl/api/Tasks/$taskId";
+    try {
+      http.Client client = http.Client();
+      final response = await client.delete(Uri.parse(userApiUrl));
+      return response;
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+  }
 }

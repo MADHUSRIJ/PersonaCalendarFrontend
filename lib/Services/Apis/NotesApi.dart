@@ -25,6 +25,25 @@ class NotesApi{
 
   }
 
+  static Future<Response> editNotes(int notesId,Map<String, dynamic> notes) async {
+    String userApiUrl = "$baseUrl/api/Notes/$notesId";
+    try {
+      http.Client client = http.Client();
+      final response = await client.put(
+        Uri.parse(userApiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(notes),
+      );
+      return response;
+    } catch (ex) {
+      throw Exception('Response error: ${ex.toString()}');
+    }
+
+
+  }
+
   static Future<Response> deleteNotes(int notesId) async {
     String userApiUrl = "$baseUrl/api/Notes/$notesId";
     try {
